@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ใบเสนอราคา / ใบแจ้งหนี้ / ใบเสร็จรับเงิน — เครื่องมือฟรี โดย ลำพูน AI Tech</title>
+<meta name="description" content="สร้างใบเสนอราคา ใบแจ้งหนี้ และใบเสร็จรับเงินภาษาไทย พิมพ์เป็น PDF ได้ทันที ไม่ต้องสมัครสมาชิก ข้อมูลอยู่ในเครื่องคุณเท่านั้น">
+<link rel="canonical" href="https://lamphunaitech.aecaichang.com/tools/quotation">
+<link rel="icon" href="../favicon-32.png" sizes="32x32">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lamphunaitech.aecaichang.com/tools/quotation">
+<meta property="og:site_name" content="ลำพูน AI Tech">
+<meta property="og:title" content="ทำใบเสนอราคา / ใบเสร็จ ภาษาไทย ฟรี — ไม่ต้องสมัครสมาชิก">
+<meta property="og:description" content="กรอกแล้วพิมพ์เป็น PDF ได้ทันที รองรับ VAT 7% ส่วนลด และแปลงยอดเงินเป็นตัวอักษรไทยอัตโนมัติ ข้อมูลอยู่ในเครื่องคุณเท่านั้น">
+<meta property="og:image" content="https://lamphunaitech.aecaichang.com/assets/cover.jpg">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{
+  --navy:#0a1740; --blue:#1f5fd0; --purple:#6b3fc4;
+  --ink:#132b49; --muted:#68788f; --line:#dfe6f1; --paper:#f1f5fb;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Sarabun","Leelawadee UI","Noto Sans Thai","TH Sarabun New",sans-serif;
+  font-size:14px;line-height:1.6}
+input,textarea,select,button{font:inherit;color:inherit}
+input:focus,textarea:focus{outline:2px solid #b8cdf2;outline-offset:1px;border-radius:3px}
+
+/* ---- toolbar ---- */
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);
+  padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  box-shadow:0 2px 10px rgba(18,42,99,.06)}
+.bar .brand{font-weight:800;color:var(--navy);margin-right:6px}
+.bar label{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px}
+.bar select,.bar .file{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:#fff}
+.btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 16px;
+  font-weight:700;font-size:13.5px;cursor:pointer}
+.btn:hover{border-color:#b8cdf2}
+.btn-primary{border:0;color:#fff;background:linear-gradient(100deg,var(--blue),var(--purple));
+  box-shadow:0 6px 16px rgba(43,79,190,.28)}
+.spacer{flex:1}
+.credit{font-size:12.5px;color:var(--muted)}
+.credit a{color:var(--blue);font-weight:700;text-decoration:none}
+
+/* ---- paper ---- */
+.sheet{width:210mm;min-height:297mm;margin:18px auto 40px;background:#fff;padding:14mm;
+  box-shadow:0 12px 34px rgba(18,42,99,.13)}
+.sheet input,.sheet textarea{width:100%;border:0;border-bottom:1px dashed #cfdcee;
+  background:transparent;padding:2px}
+.sheet textarea{resize:vertical;border:1px dashed #cfdcee;border-radius:6px;padding:6px}
+.hd{display:flex;gap:16px;align-items:flex-start;border-bottom:2px solid var(--navy);padding-bottom:12px}
+.hd .seller{flex:1;min-width:0}
+.logo-box{width:82px;flex:none}
+.logo-box img{width:82px;height:82px;object-fit:contain;display:none;border-radius:8px}
+.logo-box img[src]{display:block}
+.seller-name input{font-size:19px;font-weight:800;color:var(--navy)}
+.doc{width:64mm;flex:none;text-align:right}
+.doc h1{margin:0 0 8px;font-size:23px;color:var(--navy);letter-spacing:-.01em}
+.doc .row{display:flex;gap:6px;align-items:baseline;justify-content:flex-end;margin-bottom:2px}
+.doc .row span{color:var(--muted);font-size:12.5px;white-space:nowrap}
+.doc .row input{width:34mm;text-align:right}
+.two{display:flex;gap:14px;margin-top:14px}
+.two > div{flex:1;min-width:0}
+.lbl{font-size:11.5px;letter-spacing:.1em;font-weight:800;color:var(--blue);text-transform:uppercase;margin-bottom:4px}
+.fld{display:flex;gap:6px;align-items:baseline;margin-bottom:3px}
+.fld span{color:var(--muted);font-size:12.5px;white-space:nowrap;flex:none;min-width:52px}
+
+table{width:100%;border-collapse:collapse;margin-top:16px}
+th{background:#eef4ff;color:var(--navy);font-size:12.5px;padding:7px 8px;border:1px solid var(--line);text-align:left}
+td{border:1px solid var(--line);padding:3px 8px;vertical-align:top}
+.c{text-align:center} .r{text-align:right}
+td.r input{text-align:right}
+th.n,td.n{width:11mm} th.q,td.q{width:16mm} th.u,td.u{width:18mm}
+th.p,td.p{width:26mm} th.a,td.a{width:28mm}
+td.a{font-variant-numeric:tabular-nums}
+.del{border:0;background:transparent;color:#c0392b;cursor:pointer;font-weight:800;padding:0 4px}
+
+.foot{display:flex;gap:14px;margin-top:14px;align-items:flex-start}
+.foot .notes{flex:1;min-width:0}
+.sum{width:78mm;flex:none}
+.sum .line{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dotted var(--line)}
+.sum .line span:first-child{color:var(--muted)}
+.sum .line b{font-variant-numeric:tabular-nums}
+.sum .grand{border:0;background:#eef4ff;border-radius:10px;padding:9px 12px;margin-top:6px;font-size:16px}
+.sum .grand span:first-child{color:var(--navy);font-weight:800}
+.words{margin-top:8px;background:#f7faff;border:1px dashed #cfdcee;border-radius:10px;
+  padding:8px 12px;text-align:center;font-weight:700;color:var(--navy)}
+.sign{display:flex;gap:24px;margin-top:26px}
+.sign > div{flex:1;text-align:center}
+.sign .ln{border-bottom:1px dotted #9fb2cc;height:34px;margin-bottom:6px}
+.sign small{color:var(--muted)}
+.made{margin-top:14px;text-align:center;font-size:11px;color:#9fb0c7}
+
+#tests{position:fixed;right:12px;bottom:12px;max-width:380px;max-height:70vh;overflow:auto;
+  background:#0a1740;color:#d7e6ff;font:12px/1.5 ui-monospace,monospace;padding:12px 14px;
+  border-radius:12px;white-space:pre-wrap;display:none}
+
+@media (max-width:840px){
+  .sheet{width:auto;min-height:0;padding:16px}
+  .hd,.two,.foot,.sign{flex-direction:column}
+  .doc{width:auto;text-align:left}
+  .doc .row{justify-content:flex-start}
+  .sum{width:auto}
+  table{display:block;overflow-x:auto}
+}
+@media print{
+  .no-print{display:none!important}
+  body{background:#fff}
+  .sheet{width:auto;min-height:0;margin:0;padding:0;box-shadow:none}
+  .sheet input,.sheet textarea{border:0!important}
+  .del{display:none}
+  tr,.sign,.words{break-inside:avoid}
+  @page{size:A4;margin:13mm}
+}
+</style>
+</head>
+<body>
+
+<div class="bar no-print">
+  <span class="brand">เอกสารขาย</span>
+  <select id="doctype">
+    <option value="ใบเสนอราคา">ใบเสนอราคา</option>
+    <option value="ใบแจ้งหนี้">ใบแจ้งหนี้</option>
+    <option value="ใบวางบิล">ใบวางบิล</option>
+    <option value="ใบเสร็จรับเงิน">ใบเสร็จรับเงิน</option>
+    <option value="ใบกำกับภาษี">ใบกำกับภาษี</option>
+  </select>
+  <label><input type="checkbox" id="hasvat" checked> ภาษีมูลค่าเพิ่ม 7%</label>
+  <label class="file">โลโก้ <input type="file" id="logofile" accept="image/*" style="width:150px"></label>
+  <button class="btn" id="addrow">+ เพิ่มแถว</button>
+  <button class="btn" id="reset">ล้างข้อมูล</button>
+  <div class="spacer"></div>
+  <span class="credit">ฟรีจาก <a href="https://lamphunaitech.aecaichang.com/" target="_blank" rel="noopener">ลำพูน AI Tech</a> · ข้อมูลอยู่ในเครื่องคุณเท่านั้น</span>
+  <button class="btn btn-primary" id="print">พิมพ์ / บันทึก PDF</button>
+</div>
+
+<div class="sheet">
+  <div class="hd">
+    <div class="logo-box"><img id="logo" alt=""></div>
+    <div class="seller">
+      <div class="seller-name"><input data-k="sname" placeholder="ชื่อร้าน / บริษัทของคุณ"></div>
+      <textarea data-k="saddr" rows="2" placeholder="ที่อยู่"></textarea>
+      <div class="fld"><span>เลขผู้เสียภาษี</span><input data-k="stax" placeholder="0000000000000"></div>
+      <div class="fld"><span>โทร / อีเมล</span><input data-k="scontact" placeholder="08x-xxx-xxxx · you@email.com"></div>
+    </div>
+    <div class="doc">
+      <h1 id="title">ใบเสนอราคา</h1>
+      <div class="row"><span>เลขที่</span><input data-k="docno" placeholder="QT-0001"></div>
+      <div class="row"><span>วันที่</span><input data-k="docdate" type="date"></div>
+      <div class="row"><span id="duelbl">ยืนราคาถึง</span><input data-k="docdue" type="date"></div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      <div class="lbl">ลูกค้า</div>
+      <input data-k="cname" placeholder="ชื่อลูกค้า / บริษัท">
+      <textarea data-k="caddr" rows="2" placeholder="ที่อยู่"></textarea>
+    </div>
+    <div>
+      <div class="lbl">ข้อมูลติดต่อ</div>
+      <div class="fld"><span>เลขผู้เสียภาษี</span><input data-k="ctax"></div>
+      <div class="fld"><span>ผู้ติดต่อ</span><input data-k="cperson"></div>
+      <div class="fld"><span>โทร</span><input data-k="cphone"></div>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr>
+      <th class="n c">ลำดับ</th><th>รายละเอียด</th><th class="q c">จำนวน</th>
+      <th class="u c">หน่วย</th><th class="p r">ราคา/หน่วย</th><th class="a r">จำนวนเงิน</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="foot">
+    <div class="notes">
+      <div class="lbl">หมายเหตุ / เงื่อนไข</div>
+      <textarea data-k="notes" rows="5" placeholder="เงื่อนไขการชำระเงิน · บัญชีรับเงิน · ระยะเวลาส่งมอบ"></textarea>
+    </div>
+    <div class="sum">
+      <div class="line"><span>รวมเป็นเงิน</span><b id="sub">0.00</b></div>
+      <div class="line"><span>ส่วนลด</span><b><input data-k="discount" class="r" style="width:30mm;text-align:right" placeholder="0.00"></b></div>
+      <div class="line"><span>ยอดหลังหักส่วนลด</span><b id="net">0.00</b></div>
+      <div class="line" id="vatline"><span>ภาษีมูลค่าเพิ่ม 7%</span><b id="vat">0.00</b></div>
+      <div class="line grand"><span>รวมทั้งสิ้น</span><b id="total">0.00</b></div>
+    </div>
+  </div>
+
+  <div class="words">(<span id="words">ศูนย์บาทถ้วน</span>)</div>
+
+  <div class="sign">
+    <div><div class="ln"></div><small>ผู้เสนอราคา / ผู้รับเงิน · วันที่</small></div>
+    <div><div class="ln"></div><small>ผู้สั่งซื้อ / ผู้อนุมัติ · วันที่</small></div>
+  </div>
+
+  <div class="made">เครื่องมือฟรีจาก ลำพูน AI Tech · lamphunaitech.aecaichang.com</div>
+</div>
+
+<pre id="tests"></pre>
+
+<script>
+"use strict";
+var KEY = "lpq.v1", VAT_RATE = 0.07, DEFAULT_ROWS = 6;
+var $ = function (s) { return document.querySelector(s); };
+
+/* ---------- ตัวเลข -> ตัวอักษรไทย ----------
+   ponytail: รองรับถึง 999,999,999,999.99 บาท (2 หลักล้าน) พอสำหรับงานเอกสารขาย
+   ถ้าเกินนี้ค่อยทำ recursive grouping */
+var TH_NUM = ["ศูนย์","หนึ่ง","สอง","สาม","สี่","ห้า","หก","เจ็ด","แปด","เก้า"];
+var TH_POS = ["","สิบ","ร้อย","พัน","หมื่น","แสน"];
+
+function readGroup(s) {
+  var out = "", len = s.length, i, d, pos;
+  for (i = 0; i < len; i++) {
+    d = +s[i]; pos = len - i - 1;
+    if (!d) continue;
+    if (pos === 0 && d === 1 && len > 1) out += "เอ็ด";
+    else if (pos === 1 && d === 1) out += "สิบ";
+    else if (pos === 1 && d === 2) out += "ยี่สิบ";
+    else out += TH_NUM[d] + TH_POS[pos];
+  }
+  return out;
+}
+
+function readInt(s) {
+  s = String(s).replace(/^0+/, "");
+  if (!s) return "ศูนย์";
+  var groups = [];
+  while (s.length > 6) { groups.unshift(s.slice(-6)); s = s.slice(0, -6); }
+  groups.unshift(s);
+  return groups.map(function (g) {
+    var t = g.replace(/^0+/, "");
+    return t ? readGroup(t) : "";
+  }).join("ล้าน");
+}
+
+function bahtText(amount) {
+  var neg = amount < 0;
+  var cents = Math.round(Math.abs(amount) * 100);
+  var baht = Math.floor(cents / 100), satang = cents % 100;
+  return (neg ? "ลบ" : "") + readInt(baht) + "บาท" +
+    (satang ? readInt(satang) + "สตางค์" : "ถ้วน");
+}
+
+/* ---------- คำนวณยอด ---------- */
+function num(v) {
+  var n = parseFloat(String(v == null ? "" : v).replace(/,/g, "").trim());
+  return isFinite(n) ? n : 0;
+}
+function round2(n) { return Math.round(n * 100) / 100; }
+function money(n) {
+  return n.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function calcTotals(items, discount, hasVat) {
+  var sub = round2(items.reduce(function (s, it) { return s + num(it.qty) * num(it.price); }, 0));
+  var net = round2(Math.max(0, sub - round2(num(discount))));
+  var vat = hasVat ? round2(net * VAT_RATE) : 0;
+  return { sub: sub, net: net, vat: vat, total: round2(net + vat) };
+}
+
+/* ---------- แถวรายการ ---------- */
+function addRow(v) {
+  v = v || {};
+  var tr = document.createElement("tr");
+  tr.innerHTML =
+    '<td class="n c"><span class="idx"></span><button class="del no-print" title="ลบแถว">&times;</button></td>' +
+    '<td><input class="desc"></td>' +
+    '<td class="q r"><input class="qty" inputmode="decimal"></td>' +
+    '<td class="u c"><input class="unit"></td>' +
+    '<td class="p r"><input class="price" inputmode="decimal"></td>' +
+    '<td class="a r amt">0.00</td>';
+  tr.querySelector(".desc").value = v.desc || "";
+  tr.querySelector(".qty").value = v.qty || "";
+  tr.querySelector(".unit").value = v.unit || "";
+  tr.querySelector(".price").value = v.price || "";
+  tr.querySelector(".del").onclick = function () {
+    tr.remove();
+    if (!$("#rows").children.length) addRow();
+    refresh();
+  };
+  $("#rows").appendChild(tr);
+  return tr;
+}
+
+function readRows() {
+  return [].map.call($("#rows").children, function (tr) {
+    return {
+      desc: tr.querySelector(".desc").value,
+      qty: tr.querySelector(".qty").value,
+      unit: tr.querySelector(".unit").value,
+      price: tr.querySelector(".price").value
+    };
+  });
+}
+
+/* ---------- render + save ---------- */
+function refresh() {
+  var rows = $("#rows").children, items = readRows(), i;
+  for (i = 0; i < rows.length; i++) {
+    rows[i].querySelector(".idx").textContent = i + 1;
+    rows[i].querySelector(".amt").textContent =
+      (items[i].qty === "" && items[i].price === "")
+        ? "" : money(round2(num(items[i].qty) * num(items[i].price)));
+  }
+  var hasVat = $("#hasvat").checked;
+  var t = calcTotals(items, $('[data-k="discount"]').value, hasVat);
+  $("#sub").textContent = money(t.sub);
+  $("#net").textContent = money(t.net);
+  $("#vat").textContent = money(t.vat);
+  $("#total").textContent = money(t.total);
+  $("#vatline").style.display = hasVat ? "" : "none";
+  document.querySelector(".logo-box").style.display = $("#logo").getAttribute("src") ? "" : "none";
+  $("#words").textContent = bahtText(t.total);
+  $("#title").textContent = $("#doctype").value;
+  $("#duelbl").textContent = $("#doctype").value === "ใบเสนอราคา" ? "ยืนราคาถึง" : "ครบกำหนด";
+  save();
+}
+
+function save() {
+  var fields = {};
+  [].forEach.call(document.querySelectorAll("[data-k]"), function (el) {
+    fields[el.dataset.k] = el.value;
+  });
+  try {
+    localStorage.setItem(KEY, JSON.stringify({
+      fields: fields, rows: readRows(), logo: $("#logo").getAttribute("src") || "",
+      type: $("#doctype").value, vat: $("#hasvat").checked
+    }));
+  } catch (e) {
+    console.warn("บันทึกลง localStorage ไม่ได้:", e);
+  }
+}
+
+function load() {
+  var raw = null;
+  try { raw = localStorage.getItem(KEY); } catch (e) { /* โหมดส่วนตัว: ข้ามไป */ }
+  var d = null;
+  if (raw) { try { d = JSON.parse(raw); } catch (e) { d = null; } }
+  if (!d) {
+    for (var i = 0; i < DEFAULT_ROWS; i++) addRow();
+    $('[data-k="docdate"]').value = new Date().toISOString().slice(0, 10);
+    return;
+  }
+  Object.keys(d.fields || {}).forEach(function (k) {
+    var el = document.querySelector('[data-k="' + k + '"]');
+    if (el) el.value = d.fields[k];
+  });
+  (d.rows && d.rows.length ? d.rows : new Array(DEFAULT_ROWS).fill({})).forEach(addRow);
+  if (d.logo) $("#logo").src = d.logo;
+  if (d.type) $("#doctype").value = d.type;
+  $("#hasvat").checked = d.vat !== false;
+}
+
+/* ---------- events ---------- */
+document.addEventListener("input", refresh);
+document.addEventListener("change", refresh);
+$("#addrow").onclick = function () { addRow(); refresh(); };
+$("#print").onclick = function () { window.print(); };
+$("#reset").onclick = function () {
+  if (!confirm("ล้างข้อมูลทั้งหมดในเครื่องนี้?")) return;
+  try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
+  location.reload();
+};
+$("#logofile").onchange = function (e) {
+  var f = e.target.files && e.target.files[0];
+  if (!f) return;
+  if (f.size > 1024 * 1024) { alert("ไฟล์โลโก้ควรเล็กกว่า 1 MB"); return; }
+  var r = new FileReader();
+  r.onload = function () { $("#logo").src = r.result; refresh(); };
+  r.onerror = function () { alert("อ่านไฟล์โลโก้ไม่สำเร็จ"); };
+  r.readAsDataURL(f);
+};
+
+load();
+refresh();
+
+/* ---------- self-check: เปิดด้วย ?selftest=1 ---------- */
+if (/[?&]selftest=1/.test(location.search)) {
+  var log = [], ok = 0, fail = 0;
+  function eq(got, want, name) {
+    if (got === want) { ok++; log.push("PASS " + name); }
+    else { fail++; log.push("FAIL " + name + "\n  got:  " + got + "\n  want: " + want); }
+  }
+  eq(bahtText(0), "ศูนย์บาทถ้วน", "0");
+  eq(bahtText(1), "หนึ่งบาทถ้วน", "1");
+  eq(bahtText(11), "สิบเอ็ดบาทถ้วน", "11");
+  eq(bahtText(21), "ยี่สิบเอ็ดบาทถ้วน", "21");
+  eq(bahtText(101), "หนึ่งร้อยเอ็ดบาทถ้วน", "101");
+  eq(bahtText(1000000), "หนึ่งล้านบาทถ้วน", "1,000,000");
+  eq(bahtText(1000001), "หนึ่งล้านหนึ่งบาทถ้วน", "1,000,001");
+  eq(bahtText(1234.56), "หนึ่งพันสองร้อยสามสิบสี่บาทห้าสิบหกสตางค์", "1234.56");
+  eq(bahtText(0.25), "ศูนย์บาทยี่สิบห้าสตางค์", "0.25");
+  eq(bahtText(-5), "ลบห้าบาทถ้วน", "-5");
+  var t1 = calcTotals([{ qty: 3, price: 100 }, { qty: 2, price: 50 }], 40, true);
+  eq(t1.sub + "/" + t1.net + "/" + t1.vat + "/" + t1.total, "400/360/25.2/385.2", "totals + vat");
+  var t2 = calcTotals([{ qty: "1", price: "0.1" }, { qty: "1", price: "0.2" }], "", false);
+  eq(t2.total, 0.3, "float rounding");
+  var t3 = calcTotals([{ qty: 1, price: 100 }], 500, true);
+  eq(t3.net, 0, "ส่วนลดเกินยอด ไม่ติดลบ");
+  var el = $("#tests");
+  el.textContent = "self-check: " + ok + " ผ่าน, " + fail + " ไม่ผ่าน\n\n" + log.join("\n");
+  el.style.display = "block";
+}
+</script>
+</body>
+</html>
