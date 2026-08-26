@@ -15,6 +15,9 @@
 <meta property="og:image" content="https://lamphunaitech.aecaichang.com/assets/cover.jpg">
 <meta property="og:locale" content="th_TH">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --navy:#0a1740; --blue:#1f5fd0; --purple:#6b3fc4;
@@ -22,7 +25,7 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);
-  font-family:"Sarabun","Leelawadee UI","Noto Sans Thai","TH Sarabun New",sans-serif;
+  font-family:"Sarabun","TH Sarabun New","Leelawadee UI","Noto Sans Thai",sans-serif;
   font-size:14px;line-height:1.6}
 input,textarea,select,button{font:inherit;color:inherit}
 input:focus,textarea:focus{outline:2px solid #b8cdf2;outline-offset:1px;border-radius:3px}
@@ -56,7 +59,8 @@ input:focus,textarea:focus{outline:2px solid #b8cdf2;outline-offset:1px;border-r
 .logo-box img[src]{display:block}
 .seller-name input{font-size:19px;font-weight:800;color:var(--navy)}
 .doc{width:64mm;flex:none;text-align:right}
-.doc h1{margin:0 0 8px;font-size:23px;color:var(--navy);letter-spacing:-.01em}
+.doc h1{margin:0;font-size:23px;color:var(--navy);letter-spacing:-.01em}
+.doc .doc-en{font-size:10.5px;letter-spacing:.24em;font-weight:700;color:var(--muted);margin:1px 0 10px}
 .doc .row{display:flex;gap:6px;align-items:baseline;justify-content:flex-end;margin-bottom:2px}
 .doc .row span{color:var(--muted);font-size:12.5px;white-space:nowrap}
 .doc .row input{width:34mm;text-align:right}
@@ -146,6 +150,7 @@ td.a{font-variant-numeric:tabular-nums}
     </div>
     <div class="doc">
       <h1 id="title">ใบเสนอราคา</h1>
+      <div class="doc-en" id="title-en">QUOTATION</div>
       <div class="row"><span>เลขที่</span><input data-k="docno" placeholder="QT-0001"></div>
       <div class="row"><span>วันที่</span><input data-k="docdate" type="date"></div>
       <div class="row"><span id="duelbl">ยืนราคาถึง</span><input data-k="docdue" type="date"></div>
@@ -203,6 +208,13 @@ td.a{font-variant-numeric:tabular-nums}
 <script>
 "use strict";
 var KEY = "lpq.v1", VAT_RATE = 0.07, DEFAULT_ROWS = 6;
+var DOC_EN = {
+  "ใบเสนอราคา": "QUOTATION",
+  "ใบแจ้งหนี้": "INVOICE",
+  "ใบวางบิล": "BILLING NOTE",
+  "ใบเสร็จรับเงิน": "RECEIPT",
+  "ใบกำกับภาษี": "TAX INVOICE"
+};
 var $ = function (s) { return document.querySelector(s); };
 
 /* ---------- ตัวเลข -> ตัวอักษรไทย ----------
@@ -315,6 +327,7 @@ function refresh() {
   document.querySelector(".logo-box").style.display = $("#logo").getAttribute("src") ? "" : "none";
   $("#words").textContent = bahtText(t.total);
   $("#title").textContent = $("#doctype").value;
+  $("#title-en").textContent = DOC_EN[$("#doctype").value] || "";
   $("#duelbl").textContent = $("#doctype").value === "ใบเสนอราคา" ? "ยืนราคาถึง" : "ครบกำหนด";
   save();
 }
