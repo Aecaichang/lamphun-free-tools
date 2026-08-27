@@ -161,9 +161,23 @@ td.a{font-variant-numeric:tabular-nums}
   body{background:#fff}
   .sheet{width:auto;min-height:0;margin:0;padding:0;box-shadow:none}
   .sheet input,.sheet textarea{border:0!important}
+  /* มือจับย่อ-ขยายของ textarea ติดไปในกระดาษด้วย ต้องปิด */
+  .sheet textarea{resize:none;overflow:hidden}
   .del{display:none}
+  /* กระดาษ A4 กว้างราว 794px ซึ่งต่ำกว่า breakpoint 840px ข้างบน
+     ถ้าไม่สั่งกลับ ทุกคอลัมน์จะยุบเป็นแถวเดียวตอนพิมพ์ */
+  .hd,.two,.foot,.sign{flex-direction:row}
+  .doc{width:64mm;text-align:right}
+  .doc .row{justify-content:flex-end}
+  .sum{width:78mm}
+  table{display:table;overflow:visible}
+  .sheet{padding:0}
   tr,.sign,.words{break-inside:avoid}
-  @page{size:A4;margin:13mm}
+  thead{display:table-header-group}
+  /* ไอคอนปฏิทินของช่องวันที่ และข้อความ dd/mm/yyyy ของช่องที่ยังว่าง ไม่ควรติดไปบนกระดาษ */
+  .sheet input[type=date]::-webkit-calendar-picker-indicator{display:none}
+  .sheet input[type=date].is-empty{color:transparent}
+  @page{size:A4;margin:12mm}
 }
 </style>
 </head>
@@ -439,7 +453,16 @@ $("#logofile").onchange = function (e) {
   r.readAsDataURL(f);
 };
 
+/* ช่องวันที่ที่ยังไม่กรอก: ทำเครื่องหมายไว้เพื่อให้ตอนพิมพ์เป็นบรรทัดว่าง ไม่ใช่ dd/mm/yyyy */
+function markEmptyDates() {
+  var list = document.querySelectorAll(".sheet input[type=date]");
+  for (var i = 0; i < list.length; i++) list[i].classList.toggle("is-empty", !list[i].value);
+}
+document.addEventListener("input", markEmptyDates);
+addEventListener("beforeprint", markEmptyDates);
+
 load();
+markEmptyDates();
 refresh();
 
 /* ---------- self-check: เปิดด้วย ?selftest=1 ---------- */
