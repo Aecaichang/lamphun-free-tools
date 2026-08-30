@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#8a4a24">
-<title>คำนวณหัก ณ ที่จ่าย ฟรี — ค่าบริการ ค่าเช่า ค่าขนส่ง ค่าโฆษณา | ลำพูน AI Tech</title>
+<title>คำนวณหัก ณ ที่จ่าย + VAT 7% ฟรี | ลำพูน AI Tech</title>
 <meta name="description" content="เครื่องคิดภาษีหัก ณ ที่จ่าย 1% 2% 3% 5% พร้อม VAT 7% บอกยอดที่ต้องหักและยอดจ่ายจริงทันที ฟรี ไม่ต้องสมัครสมาชิก คำนวณในเครื่องคุณเท่านั้น">
 <link rel="canonical" href="https://lamphunaitech.aecaichang.com/tools/withholding-tax">
 <link rel="icon" href="../favicon-32.png" sizes="32x32">
@@ -62,10 +62,11 @@ h1{font-size:26px;margin:0 0 6px}
 .field .hint{color:var(--muted);font-size:12.5px;margin-top:4px}
 .err{color:#a33a1e;font-size:13px;min-height:18px;margin:2px 0 0}
 .result table{width:100%;border-collapse:collapse}
-.result td{padding:9px 4px;border-bottom:1px solid var(--line)}
+.result td,.result th{padding:9px 4px;border-bottom:1px solid var(--line)}
+.result th{text-align:left;font-weight:400}
 .result td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
-.result tr.hl td{font-weight:800;font-size:17px;border-bottom:0;color:var(--accent-ink)}
-.result .wht td{color:#a33a1e}
+.result tr.hl td,.result tr.hl th{font-weight:800;font-size:17px;border-bottom:0;color:var(--accent-ink)}
+.result .wht td,.result .wht th{color:#a33a1e}
 .prose{margin-top:34px}
 .prose h2{font-size:19px;margin:26px 0 8px}
 .prose p,.prose li{color:#4a3c2e}
@@ -117,12 +118,12 @@ footer a{color:var(--accent-ink)}
   </div>
 
   <div class="card result">
-    <table id="result">
-      <tr><td>ฐานก่อน VAT</td><td id="r-base">—</td></tr>
-      <tr><td>VAT 7%</td><td id="r-vat">—</td></tr>
-      <tr><td>รวมเป็นเงิน</td><td id="r-total">—</td></tr>
-      <tr class="wht"><td>หัก ณ ที่จ่าย <span id="r-rate"></span></td><td id="r-wht">—</td></tr>
-      <tr class="hl"><td>ยอดโอนจ่ายจริง</td><td id="r-pay">—</td></tr>
+    <table id="result" aria-label="ผลการคำนวณ">
+      <tr><th scope="row">ฐานก่อน VAT</th><td id="r-base">—</td></tr>
+      <tr><th scope="row">VAT 7%</th><td id="r-vat">—</td></tr>
+      <tr><th scope="row">รวมเป็นเงิน</th><td id="r-total">—</td></tr>
+      <tr class="wht"><th scope="row">หัก ณ ที่จ่าย <span id="r-rate"></span></th><td id="r-wht">—</td></tr>
+      <tr class="hl"><th scope="row">ยอดโอนจ่ายจริง</th><td id="r-pay">—</td></tr>
     </table>
     <p class="fine" style="margin-bottom:0">ผู้จ่ายต้องออกหนังสือรับรองหัก ณ ที่จ่าย (50 ทวิ) ให้ผู้รับ และนำส่งด้วย ภ.ง.ด.3 (บุคคลธรรมดา) หรือ ภ.ง.ด.53 (นิติบุคคล) ภายในวันที่ 7 ของเดือนถัดไป</p>
   </div>
@@ -130,7 +131,7 @@ footer a{color:var(--accent-ink)}
 
 <div class="prose">
   <h2>อัตราหัก ณ ที่จ่ายที่ใช้บ่อย</h2>
-  <table>
+  <table aria-label="อัตราหัก ณ ที่จ่ายที่ใช้บ่อย">
     <tr><th>ประเภทเงินได้</th><th>อัตรา</th></tr>
     <tr><td>ค่าขนส่ง (เอกชน ไม่ใช่ขนส่งสาธารณะ)</td><td>1%</td></tr>
     <tr><td>ค่าโฆษณา</td><td>2%</td></tr>

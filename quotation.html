@@ -185,7 +185,7 @@ td.a{font-variant-numeric:tabular-nums}
 
 <div class="bar no-print">
   <span class="brand">เอกสารขาย</span>
-  <select id="doctype">
+  <select id="doctype" aria-label="ชนิดเอกสาร">
     <option value="ใบเสนอราคา">ใบเสนอราคา</option>
     <option value="ใบแจ้งหนี้">ใบแจ้งหนี้</option>
     <option value="ใบวางบิล">ใบวางบิล</option>
@@ -205,31 +205,31 @@ td.a{font-variant-numeric:tabular-nums}
   <div class="hd">
     <div class="logo-box"><img id="logo" alt=""></div>
     <div class="seller">
-      <div class="seller-name"><input data-k="sname" placeholder="ชื่อร้าน / บริษัทของคุณ"></div>
-      <textarea data-k="saddr" rows="2" placeholder="ที่อยู่"></textarea>
-      <div class="fld"><span>เลขผู้เสียภาษี</span><input data-k="stax" placeholder="0000000000000"></div>
-      <div class="fld"><span>โทร / อีเมล</span><input data-k="scontact" placeholder="08x-xxx-xxxx · you@email.com"></div>
+      <div class="seller-name"><input data-k="sname" aria-label="ชื่อร้านหรือบริษัทของคุณ" placeholder="ชื่อร้าน / บริษัทของคุณ"></div>
+      <textarea data-k="saddr" aria-label="ที่อยู่ร้าน" rows="2" placeholder="ที่อยู่"></textarea>
+      <div class="fld"><span>เลขผู้เสียภาษี</span><input data-k="stax" aria-label="เลขผู้เสียภาษีของร้าน" placeholder="0000000000000"></div>
+      <div class="fld"><span>โทร / อีเมล</span><input data-k="scontact" aria-label="เบอร์โทรหรืออีเมลของร้าน" placeholder="08x-xxx-xxxx · you@email.com"></div>
     </div>
     <div class="doc">
       <h1 id="title">ใบเสนอราคา</h1>
       <div class="doc-en" id="title-en">QUOTATION</div>
-      <div class="row"><span>เลขที่</span><input data-k="docno" placeholder="QT-0001"></div>
-      <div class="row"><span>วันที่</span><input data-k="docdate" type="date"></div>
-      <div class="row"><span id="duelbl">ยืนราคาถึง</span><input data-k="docdue" type="date"></div>
+      <div class="row"><span>เลขที่</span><input data-k="docno" aria-label="เลขที่เอกสาร" placeholder="QT-0001"></div>
+      <div class="row"><span>วันที่</span><input data-k="docdate" aria-label="วันที่เอกสาร" type="date"></div>
+      <div class="row"><span id="duelbl">ยืนราคาถึง</span><input data-k="docdue" aria-label="วันครบกำหนด" type="date"></div>
     </div>
   </div>
 
   <div class="two">
     <div>
       <div class="lbl">ลูกค้า</div>
-      <input data-k="cname" placeholder="ชื่อลูกค้า / บริษัท">
-      <textarea data-k="caddr" rows="2" placeholder="ที่อยู่"></textarea>
+      <input data-k="cname" aria-label="ชื่อลูกค้าหรือบริษัทลูกค้า" placeholder="ชื่อลูกค้า / บริษัท">
+      <textarea data-k="caddr" aria-label="ที่อยู่ลูกค้า" rows="2" placeholder="ที่อยู่"></textarea>
     </div>
     <div>
       <div class="lbl">ข้อมูลติดต่อ</div>
-      <div class="fld"><span>เลขผู้เสียภาษี</span><input data-k="ctax"></div>
-      <div class="fld"><span>ผู้ติดต่อ</span><input data-k="cperson"></div>
-      <div class="fld"><span>โทร</span><input data-k="cphone"></div>
+      <div class="fld"><span>เลขผู้เสียภาษี</span><input data-k="ctax" aria-label="เลขผู้เสียภาษีของลูกค้า"></div>
+      <div class="fld"><span>ผู้ติดต่อ</span><input data-k="cperson" aria-label="ชื่อผู้ติดต่อ"></div>
+      <div class="fld"><span>โทร</span><input data-k="cphone" aria-label="เบอร์โทรลูกค้า"></div>
     </div>
   </div>
 
@@ -244,11 +244,11 @@ td.a{font-variant-numeric:tabular-nums}
   <div class="foot">
     <div class="notes">
       <div class="lbl">หมายเหตุ / เงื่อนไข</div>
-      <textarea data-k="notes" rows="5" placeholder="เงื่อนไขการชำระเงิน · บัญชีรับเงิน · ระยะเวลาส่งมอบ"></textarea>
+      <textarea data-k="notes" aria-label="หมายเหตุและเงื่อนไข" rows="5" placeholder="เงื่อนไขการชำระเงิน · บัญชีรับเงิน · ระยะเวลาส่งมอบ"></textarea>
     </div>
     <div class="sum">
       <div class="line"><span>รวมเป็นเงิน</span><b id="sub">0.00</b></div>
-      <div class="line"><span>ส่วนลด</span><b><input data-k="discount" class="r" style="width:30mm;text-align:right" placeholder="0.00"></b></div>
+      <div class="line"><span>ส่วนลด</span><b><input data-k="discount" aria-label="ส่วนลด" class="r" style="width:30mm;text-align:right" placeholder="0.00"></b></div>
       <div class="line"><span>ยอดหลังหักส่วนลด</span><b id="net">0.00</b></div>
       <div class="line" id="vatline"><span>ภาษีมูลค่าเพิ่ม 7%</span><b id="vat">0.00</b></div>
       <div class="line grand"><span>รวมทั้งสิ้น</span><b id="total">0.00</b></div>
@@ -341,10 +341,10 @@ function addRow(v) {
   var tr = document.createElement("tr");
   tr.innerHTML =
     '<td class="n c"><span class="idx"></span><button class="del no-print" title="ลบแถว">&times;</button></td>' +
-    '<td><input class="desc"></td>' +
-    '<td class="q r"><input class="qty" inputmode="decimal"></td>' +
+    '<td><input class="desc" aria-label="รายละเอียดรายการ"></td>' +
+    '<td class="q r"><input class="qty" aria-label="จำนวน" inputmode="decimal"></td>' +
     '<td class="u c"><input class="unit"></td>' +
-    '<td class="p r"><input class="price" inputmode="decimal"></td>' +
+    '<td class="p r"><input class="price" aria-label="ราคาต่อหน่วย" inputmode="decimal"></td>' +
     '<td class="a r amt">0.00</td>';
   tr.querySelector(".desc").value = v.desc || "";
   tr.querySelector(".qty").value = v.qty || "";
