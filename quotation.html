@@ -409,16 +409,44 @@ function save() {
   }
 }
 
+/* ---------- ข้อมูลตัวอย่าง (แสดงครั้งแรก ให้เห็นวิธีกรอก) ---------- */
+function demoData() {
+  var today = new Date(), due = new Date(today.getTime() + 30 * 864e5);
+  var iso = function (dt) { return dt.toISOString().slice(0, 10); };
+  return {
+    fields: {
+      sname: "ร้านตัวอย่าง ดีไซน์สตูดิโอ",
+      saddr: "99/9 ถ.ตัวอย่าง ต.ในเมือง อ.เมือง จ.ลำพูน 51000",
+      stax: "0123456789012",
+      scontact: "081-234-5678 · hello@example.com",
+      docno: "QT-2026-001",
+      docdate: iso(today),
+      docdue: iso(due),
+      cname: "บริษัท ลูกค้าตัวอย่าง จำกัด",
+      caddr: "222 หมู่ 2 ต.เวียงยอง อ.เมือง จ.ลำพูน 51000",
+      ctax: "0505555555555",
+      cperson: "คุณสมชาย ใจดี",
+      cphone: "089-999-9999",
+      discount: "900",
+      notes: "ยืนราคา 30 วัน · มัดจำ 50% ก่อนเริ่มงาน\nชำระโดยโอนเข้าบัญชี ธ.ตัวอย่าง 123-4-56789-0\n(นี่คือข้อมูลตัวอย่าง — พิมพ์ทับได้เลย หรือกด \"ล้างข้อมูล\" เพื่อเริ่มจากฟอร์มว่าง)"
+    },
+    rows: [
+      { desc: "ออกแบบโลโก้ + นามบัตร", qty: "1", unit: "งาน", price: "3500" },
+      { desc: "ทำเว็บไซต์แนะนำร้าน (หน้าเดียว)", qty: "1", unit: "งาน", price: "9900" },
+      { desc: "ดูแลเพจ Facebook", qty: "3", unit: "เดือน", price: "2500" },
+      {}, {}, {}
+    ],
+    type: "ใบเสนอราคา",
+    vat: true
+  };
+}
+
 function load() {
   var raw = null;
   try { raw = localStorage.getItem(KEY); } catch (e) { /* โหมดส่วนตัว: ข้ามไป */ }
   var d = null;
   if (raw) { try { d = JSON.parse(raw); } catch (e) { d = null; } }
-  if (!d) {
-    for (var i = 0; i < DEFAULT_ROWS; i++) addRow();
-    $('[data-k="docdate"]').value = new Date().toISOString().slice(0, 10);
-    return;
-  }
+  if (!d) d = demoData(); // ครั้งแรก / ยังไม่เคยเซฟ: โชว์ตัวอย่างการกรอก
   Object.keys(d.fields || {}).forEach(function (k) {
     var el = document.querySelector('[data-k="' + k + '"]');
     if (el) el.value = d.fields[k];
@@ -436,7 +464,13 @@ $("#addrow").onclick = function () { addRow(); refresh(); };
 $("#print").onclick = function () { window.print(); };
 $("#reset").onclick = function () {
   if (!confirm("ล้างข้อมูลทั้งหมดในเครื่องนี้?")) return;
-  try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
+  // เซฟสถานะว่างแทนการลบ key — ไม่งั้นรีโหลดแล้วข้อมูลตัวอย่างจะเด้งกลับมา
+  try {
+    localStorage.setItem(KEY, JSON.stringify({
+      fields: { docdate: new Date().toISOString().slice(0, 10) },
+      rows: [], type: "ใบเสนอราคา", vat: true
+    }));
+  } catch (e) { /* โหมดส่วนตัว: ปล่อยให้กลับไปเป็นตัวอย่าง */ }
   location.reload();
 };
 function setLogoLabel(has) {
