@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#8a4a24">
+<title>คำนวณหัก ณ ที่จ่าย ฟรี — ค่าบริการ ค่าเช่า ค่าขนส่ง ค่าโฆษณา | ลำพูน AI Tech</title>
+<meta name="description" content="เครื่องคิดภาษีหัก ณ ที่จ่าย 1% 2% 3% 5% พร้อม VAT 7% บอกยอดที่ต้องหักและยอดจ่ายจริงทันที ฟรี ไม่ต้องสมัครสมาชิก คำนวณในเครื่องคุณเท่านั้น">
+<link rel="canonical" href="https://lamphunaitech.aecaichang.com/tools/withholding-tax">
+<link rel="icon" href="../favicon-32.png" sizes="32x32">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lamphunaitech.aecaichang.com/tools/withholding-tax">
+<meta property="og:site_name" content="ลำพูน AI Tech">
+<meta property="og:title" content="คำนวณหัก ณ ที่จ่าย ฟรี — รู้ยอดหักและยอดจ่ายจริงทันที">
+<meta property="og:description" content="เลือกประเภทงาน กรอกยอด เดี๋ยวคำนวณให้ทั้งฐานก่อน VAT ยอดหัก ณ ที่จ่าย และยอดโอนจ่ายจริง">
+<meta property="og:image" content="https://lamphunaitech.aecaichang.com/assets/cover.jpg">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "คำนวณภาษีหัก ณ ที่จ่าย",
+  "url": "https://lamphunaitech.aecaichang.com/tools/withholding-tax",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "THB" },
+  "provider": { "@type": "ProfessionalService", "name": "ลำพูน AI Tech", "url": "https://lamphunaitech.aecaichang.com/" }
+}
+</script>
+<style>
+:root{
+  --ink:#2b2018; --accent:#8a4a24; --accent-ink:#6b3717; --accent-soft:#f1e5d3;
+  --muted:#7c6b59; --line:#e5dac7; --line-2:#cdbca2; --paper:#f3ebdd;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Sarabun","TH Sarabun New","Leelawadee UI","Noto Sans Thai",sans-serif;
+  font-size:15px;line-height:1.65}
+input,select,button{font:inherit;color:inherit}
+input:focus,select:focus{outline:2px solid var(--line-2);outline-offset:1px;border-radius:3px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);
+  padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
+  box-shadow:0 2px 10px rgba(58,38,20,.07)}
+.bar .brand{font-weight:800;text-decoration:none;color:var(--ink)}
+.bar .crumb{color:var(--muted);font-size:13px}
+.bar .crumb a{color:var(--accent-ink)}
+main{max-width:860px;margin:0 auto;padding:26px 16px 60px}
+h1{font-size:26px;margin:0 0 6px}
+.lede{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field input,.field select{width:100%;border:1px solid var(--line-2);border-radius:8px;
+  padding:10px 12px;background:#fff}
+.field .hint{color:var(--muted);font-size:12.5px;margin-top:4px}
+.err{color:#a33a1e;font-size:13px;min-height:18px;margin:2px 0 0}
+.result table{width:100%;border-collapse:collapse}
+.result td{padding:9px 4px;border-bottom:1px solid var(--line)}
+.result td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.result tr.hl td{font-weight:800;font-size:17px;border-bottom:0;color:var(--accent-ink)}
+.result .wht td{color:#a33a1e}
+.prose{margin-top:34px}
+.prose h2{font-size:19px;margin:26px 0 8px}
+.prose p,.prose li{color:#4a3c2e}
+.prose table{border-collapse:collapse;width:100%;max-width:520px}
+.prose th,.prose td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);font-size:14px}
+.prose th{background:var(--accent-soft)}
+.fine{color:var(--muted);font-size:12.5px}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 16px;text-align:center;
+  color:var(--muted);font-size:13px}
+footer a{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a class="brand" href="/">ลำพูน AI Tech</a>
+  <span class="crumb"><a href="/#tools">เครื่องมือฟรี</a> / หัก ณ ที่จ่าย</span>
+</div>
+<main>
+<h1>คำนวณหัก ณ ที่จ่าย + VAT 7%</h1>
+<p class="lede">กรอกยอดเงินแล้วเลือกประเภทงาน เดี๋ยวบอกให้ครบ: ฐานก่อน VAT, ยอดที่ต้องหัก, และยอดที่ต้องโอนจ่ายจริง — คำนวณในเครื่องคุณ ไม่มีข้อมูลถูกส่งไปที่ไหน</p>
+
+<div class="grid">
+  <div class="card">
+    <div class="field">
+      <label for="amount">ยอดเงิน (บาท)</label>
+      <input id="amount" inputmode="decimal" autocomplete="off" placeholder="เช่น 10,000">
+      <p class="err" id="amount-err"></p>
+    </div>
+    <div class="field">
+      <label for="mode">ยอดที่กรอกคือ</label>
+      <select id="mode">
+        <option value="pre">ยอดก่อน VAT (ยังไม่รวม VAT)</option>
+        <option value="inc">ยอดรวม VAT 7% แล้ว</option>
+        <option value="novat">ไม่มี VAT (ผู้รับไม่จด VAT)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="type">ประเภทเงินที่จ่าย</label>
+      <select id="type">
+        <option value="3" selected>ค่าบริการ / ค่าจ้างทำของ — 3%</option>
+        <option value="3f">ค่าวิชาชีพอิสระ (บัญชี กฎหมาย ฯลฯ) — 3%</option>
+        <option value="1">ค่าขนส่ง (ไม่ใช่ไปรษณีย์/ขนส่งสาธารณะ) — 1%</option>
+        <option value="2">ค่าโฆษณา — 2%</option>
+        <option value="5">ค่าเช่าอสังหาริมทรัพย์ / ทรัพย์สิน — 5%</option>
+        <option value="10">เงินปันผล — 10%</option>
+      </select>
+      <p class="hint">หัก ณ ที่จ่ายคิดจากยอด<strong>ก่อน VAT</strong> เสมอ</p>
+    </div>
+  </div>
+
+  <div class="card result">
+    <table id="result">
+      <tr><td>ฐานก่อน VAT</td><td id="r-base">—</td></tr>
+      <tr><td>VAT 7%</td><td id="r-vat">—</td></tr>
+      <tr><td>รวมเป็นเงิน</td><td id="r-total">—</td></tr>
+      <tr class="wht"><td>หัก ณ ที่จ่าย <span id="r-rate"></span></td><td id="r-wht">—</td></tr>
+      <tr class="hl"><td>ยอดโอนจ่ายจริง</td><td id="r-pay">—</td></tr>
+    </table>
+    <p class="fine" style="margin-bottom:0">ผู้จ่ายต้องออกหนังสือรับรองหัก ณ ที่จ่าย (50 ทวิ) ให้ผู้รับ และนำส่งด้วย ภ.ง.ด.3 (บุคคลธรรมดา) หรือ ภ.ง.ด.53 (นิติบุคคล) ภายในวันที่ 7 ของเดือนถัดไป</p>
+  </div>
+</div>
+
+<div class="prose">
+  <h2>อัตราหัก ณ ที่จ่ายที่ใช้บ่อย</h2>
+  <table>
+    <tr><th>ประเภทเงินได้</th><th>อัตรา</th></tr>
+    <tr><td>ค่าขนส่ง (เอกชน ไม่ใช่ขนส่งสาธารณะ)</td><td>1%</td></tr>
+    <tr><td>ค่าโฆษณา</td><td>2%</td></tr>
+    <tr><td>ค่าบริการ / ค่าจ้างทำของ / ค่าวิชาชีพอิสระ</td><td>3%</td></tr>
+    <tr><td>ค่าเช่าอสังหาริมทรัพย์และทรัพย์สิน</td><td>5%</td></tr>
+    <tr><td>เงินปันผล</td><td>10%</td></tr>
+  </table>
+  <h2>ข้อควรรู้</h2>
+  <ul>
+    <li>หักเฉพาะเมื่อยอดจ่ายตั้งแต่ <strong>1,000 บาทขึ้นไป</strong>ต่อครั้ง (ยกเว้นสัญญาต่อเนื่องที่รวมทั้งปีถึง 1,000 บาท)</li>
+    <li>ฐานที่ใช้หักคือยอด<strong>ก่อน VAT</strong> — จุดที่ผิดกันบ่อยที่สุดคือเอายอดรวม VAT ไปคูณ</li>
+    <li>ค่าซื้อสินค้าอย่างเดียว (ไม่มีบริการ) ไม่ต้องหัก ณ ที่จ่าย</li>
+    <li>ตัวเลขนี้เป็นอัตราทั่วไปสำหรับนิติบุคคลจ่ายให้ผู้รับในประเทศ — กรณีพิเศษให้ตรวจกับ<a href="https://www.rd.go.th" target="_blank" rel="noopener">กรมสรรพากร</a>หรือนักบัญชีของคุณ</li>
+  </ul>
+  <h2>เครื่องมือฟรีตัวอื่นของเรา</h2>
+  <p><a href="/tools/quotation">ใบเสนอราคา / ใบแจ้งหนี้ / ใบเสร็จรับเงิน</a> · <a href="/tools/promptpay">สร้าง QR พร้อมเพย์</a> · <a href="/tools/vat">คำนวณ VAT 7%</a></p>
+</div>
+</main>
+<footer>
+  เครื่องมือฟรีโดย <a href="/">ลำพูน AI Tech</a> · <a href="https://www.facebook.com/profile.php?id=61592915202550" target="_blank" rel="noopener">Facebook Page</a> · <a href="https://github.com/Aecaichang/lamphun-free-tools" target="_blank" rel="noopener">โค้ดบน GitHub (MIT)</a>
+</footer>
+
+<script>
+'use strict';
+const VAT_RATE = 0.07;
+const RATES = { '1': 0.01, '2': 0.02, '3': 0.03, '3f': 0.03, '5': 0.05, '10': 0.10 };
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function calc(amount, mode, typeKey){
+  const base = mode === 'inc' ? amount / (1 + VAT_RATE) : amount;
+  const vat = mode === 'novat' ? 0 : base * VAT_RATE;
+  const rate = RATES[typeKey];
+  const wht = base * rate;
+  return { base, vat, total: base + vat, rate, wht, pay: base + vat - wht };
+}
+
+/* self-check: จ่ายค่าบริการ 10,000 ก่อน VAT หัก 3% ต้องโอน 10,400 */
+(function(){
+  const r = calc(10000, 'pre', '3');
+  console.assert(Math.abs(r.vat - 700) < 0.005 && Math.abs(r.wht - 300) < 0.005
+    && Math.abs(r.pay - 10400) < 0.005, 'calc ผิด', r);
+  const r2 = calc(10700, 'inc', '3');
+  console.assert(Math.abs(r2.base - 10000) < 0.005 && Math.abs(r2.pay - 10400) < 0.005, 'ถอด VAT ผิด', r2);
+})();
+
+function render(){
+  const raw = $('amount').value.trim().replace(/,/g, '');
+  const ids = ['r-base','r-vat','r-total','r-wht','r-pay'];
+  let err = '';
+  const amount = Number(raw);
+  if (raw && (!isFinite(amount) || amount <= 0)) err = 'ยอดเงินต้องเป็นตัวเลขมากกว่า 0';
+  $('amount-err').textContent = err;
+  if (!raw || err){
+    ids.forEach(id => $(id).textContent = '—');
+    $('r-rate').textContent = '';
+    return;
+  }
+  const r = calc(amount, $('mode').value, $('type').value);
+  $('r-base').textContent = fmt(r.base);
+  $('r-vat').textContent = r.vat ? fmt(r.vat) : '—';
+  $('r-total').textContent = fmt(r.total);
+  $('r-rate').textContent = (r.rate * 100).toFixed(0) + '%';
+  $('r-wht').textContent = '− ' + fmt(r.wht);
+  $('r-pay').textContent = fmt(r.pay);
+}
+
+['amount','mode','type'].forEach(id => {
+  $(id).addEventListener('input', render);
+  $(id).addEventListener('change', render);
+});
+</script>
+</body>
+</html>

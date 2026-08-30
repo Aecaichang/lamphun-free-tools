@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#8a4a24">
+<title>สร้าง QR พร้อมเพย์ (PromptPay) ฟรี — ใส่ยอดเงินได้ | ลำพูน AI Tech</title>
+<meta name="description" content="สร้าง QR Code พร้อมเพย์จากเบอร์โทรหรือเลขบัตรประชาชน ใส่ยอดเงินได้ ดาวน์โหลดรูปไปติดหน้าร้านหรือส่งให้ลูกค้า ฟรี ไม่ต้องสมัครสมาชิก ข้อมูลอยู่ในเครื่องคุณเท่านั้น">
+<link rel="canonical" href="https://lamphunaitech.aecaichang.com/tools/promptpay">
+<link rel="icon" href="../favicon-32.png" sizes="32x32">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lamphunaitech.aecaichang.com/tools/promptpay">
+<meta property="og:site_name" content="ลำพูน AI Tech">
+<meta property="og:title" content="สร้าง QR พร้อมเพย์ ฟรี — ใส่ยอดเงินได้ ดาวน์โหลดได้ทันที">
+<meta property="og:description" content="ใส่เบอร์โทรหรือเลขบัตรประชาชน กำหนดยอดเงิน แล้วดาวน์โหลด QR ไปใช้ได้เลย ข้อมูลอยู่ในเครื่องคุณเท่านั้น">
+<meta property="og:image" content="https://lamphunaitech.aecaichang.com/assets/cover.jpg">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "สร้าง QR พร้อมเพย์",
+  "url": "https://lamphunaitech.aecaichang.com/tools/promptpay",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "THB" },
+  "provider": { "@type": "ProfessionalService", "name": "ลำพูน AI Tech", "url": "https://lamphunaitech.aecaichang.com/" }
+}
+</script>
+<style>
+:root{
+  --ink:#2b2018; --accent:#8a4a24; --accent-ink:#6b3717; --accent-soft:#f1e5d3;
+  --muted:#7c6b59; --line:#e5dac7; --line-2:#cdbca2; --paper:#f3ebdd;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Sarabun","TH Sarabun New","Leelawadee UI","Noto Sans Thai",sans-serif;
+  font-size:15px;line-height:1.65}
+input,select,button{font:inherit;color:inherit}
+input:focus,select:focus{outline:2px solid var(--line-2);outline-offset:1px;border-radius:3px}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);
+  padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
+  box-shadow:0 2px 10px rgba(58,38,20,.07)}
+.bar .brand{font-weight:800;text-decoration:none;color:var(--ink)}
+.bar .crumb{color:var(--muted);font-size:13px}
+.bar .crumb a{color:var(--accent-ink)}
+main{max-width:860px;margin:0 auto;padding:26px 16px 60px}
+h1{font-size:26px;margin:0 0 6px}
+.lede{color:var(--muted);margin:0 0 22px}
+.grid{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field input,.field select{width:100%;border:1px solid var(--line-2);border-radius:8px;
+  padding:10px 12px;background:#fff}
+.field .hint{color:var(--muted);font-size:12.5px;margin-top:4px}
+.err{color:#a33a1e;font-size:13px;min-height:18px;margin:2px 0 0}
+.qr-card{text-align:center}
+.qr-box{background:#fff;display:inline-block;padding:10px;border-radius:8px}
+#qr img,#qr canvas{display:block;width:240px;height:240px;image-rendering:pixelated}
+.qr-empty{width:240px;height:240px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:13.5px;border:1.5px dashed var(--line-2);border-radius:8px;padding:16px}
+.amt-label{font-weight:800;font-size:18px;margin:10px 0 2px}
+.acct-label{color:var(--muted);font-size:13px;margin:0 0 12px}
+.btn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:8px;cursor:pointer;
+  padding:10px 18px;font-weight:700;text-decoration:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-ink)}
+.btn-primary[disabled]{opacity:.45;cursor:not-allowed}
+.prose{margin-top:34px}
+.prose h2{font-size:19px;margin:26px 0 8px}
+.prose p,.prose li{color:#4a3c2e}
+.fine{color:var(--muted);font-size:12.5px}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 16px;text-align:center;
+  color:var(--muted);font-size:13px}
+footer a{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a class="brand" href="/">ลำพูน AI Tech</a>
+  <span class="crumb"><a href="/#tools">เครื่องมือฟรี</a> / QR พร้อมเพย์</span>
+</div>
+<main>
+<h1>สร้าง QR พร้อมเพย์ ฟรี</h1>
+<p class="lede">ใส่เบอร์โทรหรือเลขบัตรประชาชนที่ผูกพร้อมเพย์ไว้ กำหนดยอดเงินได้ แล้วดาวน์โหลดรูปไปติดหน้าร้านหรือส่งให้ลูกค้า — ทุกอย่างคำนวณในเครื่องคุณ ไม่มีข้อมูลถูกส่งไปที่ไหน</p>
+
+<div class="grid">
+  <div class="card">
+    <div class="field">
+      <label for="type">ผูกพร้อมเพย์ด้วย</label>
+      <select id="type">
+        <option value="phone">เบอร์โทรศัพท์</option>
+        <option value="id">เลขบัตรประชาชน</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="target" id="target-label">เบอร์โทรศัพท์</label>
+      <input id="target" inputmode="numeric" autocomplete="off" placeholder="08x-xxx-xxxx">
+      <p class="err" id="target-err"></p>
+    </div>
+    <div class="field">
+      <label for="amount">ยอดเงิน (บาท) — เว้นว่างได้ ให้คนจ่ายกรอกเอง</label>
+      <input id="amount" inputmode="decimal" autocomplete="off" placeholder="เช่น 150.00">
+      <p class="err" id="amount-err"></p>
+    </div>
+    <p class="fine">เครื่องมือนี้สร้าง QR ตามมาตรฐาน EMVCo ที่ธนาคารไทยใช้ ตัวเลขที่กรอกจะไม่ถูกบันทึกหรือส่งออกจากเครื่องคุณ</p>
+  </div>
+
+  <div class="card qr-card">
+    <div class="qr-box" id="qr-box">
+      <div id="qr"><div class="qr-empty">กรอกเบอร์โทรหรือเลขบัตรประชาชนเพื่อสร้าง QR</div></div>
+    </div>
+    <p class="amt-label" id="amt-label">&nbsp;</p>
+    <p class="acct-label" id="acct-label">&nbsp;</p>
+    <button class="btn btn-primary" id="dl" disabled>ดาวน์โหลดรูป QR</button>
+  </div>
+</div>
+
+<div class="prose">
+  <h2>ใช้ยังไง</h2>
+  <p>เลือกว่าพร้อมเพย์ของคุณผูกกับเบอร์โทรหรือเลขบัตรประชาชน กรอกตัวเลข ถ้าอยากล็อกยอดเงิน (เช่นค่าสินค้า 150 บาท) ใส่ยอดไว้ QR จะบังคับยอดนั้นตอนสแกน ถ้าเว้นว่างคนจ่ายจะกรอกยอดเองได้</p>
+  <h2>ปลอดภัยไหม</h2>
+  <p>QR พร้อมเพย์เป็นข้อมูล "รับเงิน" เท่านั้น — คนที่สแกนได้แค่โอนเงินเข้าบัญชีคุณ ไม่สามารถถอนหรือดูดเงินออกได้ และหน้านี้ทำงานในเบราว์เซอร์ของคุณทั้งหมด ไม่มีการเก็บข้อมูลใด ๆ</p>
+  <h2>เครื่องมือฟรีตัวอื่นของเรา</h2>
+  <p><a href="/tools/quotation">ใบเสนอราคา / ใบแจ้งหนี้ / ใบเสร็จรับเงิน</a> · <a href="/tools/withholding-tax">คำนวณหัก ณ ที่จ่าย</a> · <a href="/tools/vat">คำนวณ VAT 7%</a></p>
+</div>
+</main>
+<footer>
+  เครื่องมือฟรีโดย <a href="/">ลำพูน AI Tech</a> · <a href="https://www.facebook.com/profile.php?id=61592915202550" target="_blank" rel="noopener">Facebook Page</a> · <a href="https://github.com/Aecaichang/lamphun-free-tools" target="_blank" rel="noopener">โค้ดบน GitHub (MIT)</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+'use strict';
+/* ---- EMVCo PromptPay payload ---- */
+const PROMPTPAY_AID = 'A000000677010111';
+
+function tlv(id, value){
+  return id + String(value.length).padStart(2, '0') + value;
+}
+
+/* CRC16-CCITT (poly 0x1021, init 0xFFFF) ตามสเปค EMVCo */
+function crc16(str){
+  let crc = 0xFFFF;
+  for (let i = 0; i < str.length; i++){
+    crc ^= str.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++){
+      crc = crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1;
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+
+function buildPayload(type, target, amount){
+  const acct = type === 'phone'
+    ? tlv('01', '0066' + target.slice(1))
+    : tlv('02', target);
+  let p =
+    tlv('00', '01') +
+    tlv('01', amount ? '12' : '11') +
+    tlv('29', tlv('00', PROMPTPAY_AID) + acct) +
+    tlv('53', '764');
+  if (amount) p += tlv('54', amount.toFixed(2));
+  p += tlv('58', 'TH');
+  p += '6304';
+  return p + crc16(p);
+}
+
+/* self-check โครงสร้าง payload — ถ้าพังจะเห็นใน console */
+(function(){
+  const t = buildPayload('phone', '0812345678', 100);
+  console.assert(t.startsWith('000201010212'), 'payload header ผิด');
+  console.assert(t.includes('0016' + PROMPTPAY_AID), 'AID หาย');
+  console.assert(t.includes('54061' + '00.00'.slice(0)), 'amount field ผิด: ' + t);
+  console.assert(/6304[0-9A-F]{4}$/.test(t), 'CRC ท้าย payload ผิด');
+})();
+
+/* ---- UI ---- */
+const $ = id => document.getElementById(id);
+const typeEl = $('type'), targetEl = $('target'), amountEl = $('amount');
+let currentDataUrl = null;
+
+function validate(){
+  const type = typeEl.value;
+  const raw = targetEl.value.replace(/[-\s]/g, '');
+  const amtRaw = amountEl.value.trim();
+  let targetErr = '', amountErr = '';
+
+  if (raw && type === 'phone' && !/^0\d{9}$/.test(raw))
+    targetErr = 'เบอร์โทรต้องมี 10 หลัก ขึ้นต้นด้วย 0';
+  if (raw && type === 'id' && !/^\d{13}$/.test(raw))
+    targetErr = 'เลขบัตรประชาชนต้องมี 13 หลัก';
+
+  let amount = null;
+  if (amtRaw){
+    amount = Number(amtRaw.replace(/,/g, ''));
+    if (!isFinite(amount) || amount <= 0) { amountErr = 'ยอดเงินต้องเป็นตัวเลขมากกว่า 0'; amount = null; }
+    else if (amount > 9999999) { amountErr = 'ยอดเงินสูงเกินไป'; amount = null; }
+  }
+
+  $('target-err').textContent = targetErr;
+  $('amount-err').textContent = amountErr;
+  const ok = raw && !targetErr && !amountErr;
+  return { ok, type, target: raw, amount, amtGiven: !!amtRaw };
+}
+
+function render(){
+  const v = validate();
+  const qrEl = $('qr'), dl = $('dl');
+  currentDataUrl = null;
+  if (!v.ok || (v.amtGiven && v.amount === null)){
+    qrEl.innerHTML = '<div class="qr-empty">กรอกเบอร์โทรหรือเลขบัตรประชาชนเพื่อสร้าง QR</div>';
+    $('amt-label').innerHTML = '&nbsp;';
+    $('acct-label').innerHTML = '&nbsp;';
+    dl.disabled = true;
+    return;
+  }
+  const payload = buildPayload(v.type, v.target, v.amount);
+  const qr = qrcode(0, 'M');
+  qr.addData(payload);
+  qr.make();
+  qrEl.innerHTML = qr.createImgTag(6, 8);
+  currentDataUrl = qrEl.querySelector('img').src;
+  $('amt-label').textContent = v.amount
+    ? v.amount.toLocaleString('th-TH', { minimumFractionDigits: 2 }) + ' บาท'
+    : 'ไม่ระบุยอด (คนจ่ายกรอกเอง)';
+  $('acct-label').textContent = (v.type === 'phone' ? 'พร้อมเพย์เบอร์ ' : 'พร้อมเพย์เลขบัตร ') + v.target;
+  dl.disabled = false;
+}
+
+$('dl').addEventListener('click', () => {
+  if (!currentDataUrl) return;
+  const a = document.createElement('a');
+  a.href = currentDataUrl;
+  a.download = 'promptpay-qr.gif';
+  a.click();
+});
+
+typeEl.addEventListener('change', () => {
+  $('target-label').textContent = typeEl.value === 'phone' ? 'เบอร์โทรศัพท์' : 'เลขบัตรประชาชน';
+  targetEl.placeholder = typeEl.value === 'phone' ? '08x-xxx-xxxx' : '1-2345-67890-12-3';
+  render();
+});
+targetEl.addEventListener('input', render);
+amountEl.addEventListener('input', render);
+</script>
+</body>
+</html>
