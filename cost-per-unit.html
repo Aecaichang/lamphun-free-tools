@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#8a4a24">
+<title>คำนวณต้นทุนต่อแก้ว / ต่อจาน ฟรี — รู้กำไรจริงต่อเมนู | ลำพูน AI Tech</title>
+<meta name="description" content="กรอกวัตถุดิบแต่ละอย่าง ราคาที่ซื้อ และปริมาณที่ใช้ต่อแก้ว รู้ต้นทุนและกำไรต่อเมนูทันที ฟรี ไม่ต้องสมัครสมาชิก คำนวณในเครื่องคุณเท่านั้น">
+<link rel="canonical" href="https://lamphunaitech.aecaichang.com/tools/cost-per-unit">
+<link rel="icon" href="../favicon-32.png" sizes="32x32">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lamphunaitech.aecaichang.com/tools/cost-per-unit">
+<meta property="og:site_name" content="ลำพูน AI Tech">
+<meta property="og:title" content="คำนวณต้นทุนต่อแก้ว / ต่อจาน ฟรี — ขายดีแต่เงินไม่เหลือ เริ่มเช็กที่นี่">
+<meta property="og:description" content="กรอกวัตถุดิบและปริมาณที่ใช้ต่อเมนู เห็นต้นทุน กำไรต่อแก้ว และเปอร์เซ็นต์กำไรทันที">
+<meta property="og:image" content="https://lamphunaitech.aecaichang.com/assets/cover.jpg">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "คำนวณต้นทุนต่อแก้ว / ต่อจาน",
+  "url": "https://lamphunaitech.aecaichang.com/tools/cost-per-unit",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "THB" },
+  "provider": { "@type": "ProfessionalService", "name": "ลำพูน AI Tech", "url": "https://lamphunaitech.aecaichang.com/" }
+}
+</script>
+<style>
+:root{
+  --ink:#2b2018; --accent:#8a4a24; --accent-ink:#6b3717; --accent-soft:#f1e5d3;
+  --muted:#7c6b59; --line:#e5dac7; --line-2:#cdbca2; --paper:#f3ebdd;
+  --good:#2f6b46; --bad:#a33a1e;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Sarabun","TH Sarabun New","Leelawadee UI","Noto Sans Thai",sans-serif;
+  font-size:15px;line-height:1.65}
+input,select,button{font:inherit;color:inherit}
+input:focus,select:focus{outline:2px solid var(--line-2);outline-offset:1px;border-radius:3px}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);
+  padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
+  box-shadow:0 2px 10px rgba(58,38,20,.07)}
+.bar .brand{font-weight:800;text-decoration:none;color:var(--ink)}
+.bar .crumb{color:var(--muted);font-size:13px}
+.bar .crumb a{color:var(--accent-ink)}
+main{max-width:760px;margin:0 auto;padding:26px 16px 60px}
+h1{font-size:26px;margin:0 0 6px}
+.lede{color:var(--muted);margin:0 0 22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:18px}
+.card h2{font-size:17px;margin:0 0 4px}
+.card .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field input{width:100%;border:1px solid var(--line-2);border-radius:8px;padding:10px 12px;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* แถววัตถุดิบ — บนจอแคบเรียงเป็นบล็อกพร้อมป้ายกำกับ */
+.ing{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px;background:#fffdf9}
+.ing .grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:10px}
+.ing .cell label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:4px}
+.ing input{width:100%;border:1px solid var(--line-2);border-radius:8px;padding:9px 10px;background:#fff}
+.ing .foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;
+  font-size:13px;color:var(--muted)}
+.ing .foot b{color:var(--accent-ink);font-variant-numeric:tabular-nums}
+@media (max-width:640px){ .ing .grid{grid-template-columns:1fr 1fr} .two{grid-template-columns:1fr} }
+
+.btn{border:1px solid var(--line-2);background:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:700}
+.btn-link{border:0;background:none;color:var(--bad);cursor:pointer;font-size:13px;padding:0}
+.result table{width:100%;border-collapse:collapse;margin-top:6px}
+.result td{padding:9px 4px;border-bottom:1px solid var(--line)}
+.result td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+.result tr.hl td{font-weight:800;font-size:17px;border-bottom:0}
+.result tr.hl.up td{color:var(--good)}
+.result tr.hl.down td{color:var(--bad)}
+.verdict{margin-top:10px;font-size:13.5px;color:var(--muted);min-height:20px}
+.prose{margin-top:34px}
+.prose h2{font-size:19px;margin:26px 0 8px}
+.prose p,.prose li{color:#4a3c2e}
+.fine{color:var(--muted);font-size:12.5px}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 16px;text-align:center;
+  color:var(--muted);font-size:13px}
+footer a{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a class="brand" href="/">ลำพูน AI Tech</a>
+  <span class="crumb"><a href="/#tools">เครื่องมือฟรี</a> / ต้นทุนต่อแก้ว</span>
+</div>
+<main>
+<h1>คำนวณต้นทุนต่อแก้ว / ต่อจาน</h1>
+<p class="lede">ขายดีแต่เงินไม่เหลือ มักเริ่มจากไม่รู้ต้นทุนจริงต่อเมนู — กรอกวัตถุดิบแล้วเห็นกำไรต่อแก้วทันที คำนวณในเครื่องคุณ ไม่มีข้อมูลถูกส่งไปที่ไหน</p>
+
+<div class="card">
+  <h2>1. วัตถุดิบต่อ 1 เมนู</h2>
+  <p class="hint">หน่วยของ “ปริมาณที่ซื้อ” กับ “ใช้ต่อเมนู” ต้องเป็นหน่วยเดียวกัน เช่น ซื้อเมล็ดกาแฟ 1,000 กรัม ใช้ 18 กรัม ก็กรอก 1000 กับ 18</p>
+  <div id="rows"></div>
+  <button class="btn" id="add" type="button">+ เพิ่มวัตถุดิบ</button>
+</div>
+
+<div class="card">
+  <h2>2. ต้นทุนอื่นต่อเมนู (ถ้ามี)</h2>
+  <p class="hint">เช่น แก้ว หลอด ฝา ถุง หรือค่าแรงที่คุณอยากเฉลี่ยลงต่อแก้ว — ไม่กรอกก็ได้</p>
+  <div class="two">
+    <div class="field">
+      <label for="extra">ต้นทุนอื่นต่อเมนู (บาท)</label>
+      <input id="extra" inputmode="decimal" autocomplete="off" placeholder="เช่น 3.50">
+    </div>
+    <div class="field">
+      <label for="price">ราคาขายต่อเมนู (บาท)</label>
+      <input id="price" inputmode="decimal" autocomplete="off" placeholder="เช่น 65">
+    </div>
+  </div>
+</div>
+
+<div class="card result">
+  <h2>3. ผลลัพธ์</h2>
+  <table>
+    <tr><td>ต้นทุนวัตถุดิบ</td><td id="r-ing">—</td></tr>
+    <tr><td>ต้นทุนอื่น</td><td id="r-extra">—</td></tr>
+    <tr><td>ต้นทุนรวมต่อเมนู</td><td id="r-cost">—</td></tr>
+    <tr><td>ราคาขาย</td><td id="r-price">—</td></tr>
+    <tr class="hl" id="r-profit-row"><td>กำไรต่อเมนู</td><td id="r-profit">—</td></tr>
+  </table>
+  <p class="verdict" id="verdict"></p>
+</div>
+
+<div class="prose">
+  <h2>สูตรที่ใช้</h2>
+  <ul>
+    <li><strong>ต้นทุนวัตถุดิบแต่ละตัว</strong> = ราคาที่ซื้อ ÷ ปริมาณที่ซื้อ × ปริมาณที่ใช้ต่อเมนู</li>
+    <li><strong>ต้นทุนรวมต่อเมนู</strong> = ต้นทุนวัตถุดิบทุกตัวรวมกัน + ต้นทุนอื่น</li>
+    <li><strong>กำไรต่อเมนู</strong> = ราคาขาย − ต้นทุนรวมต่อเมนู</li>
+    <li><strong>เปอร์เซ็นต์กำไร</strong> = กำไร ÷ ราคาขาย × 100</li>
+  </ul>
+  <p class="fine">ตัวเลขนี้คือต้นทุนต่อเมนู ยังไม่รวมค่าเช่า ค่าน้ำค่าไฟ เงินเดือน และของเสีย เว้นแต่คุณเฉลี่ยใส่ในช่อง “ต้นทุนอื่น” เอง — ใช้เปรียบเทียบเมนูต่อเมนูได้ดี แต่อย่าใช้ตัดสินกำไรทั้งร้าน</p>
+  <h2>เครื่องมือฟรีตัวอื่นของเรา</h2>
+  <p><a href="/tools/quotation">ใบเสนอราคา / ใบแจ้งหนี้ / ใบเสร็จรับเงิน</a> · <a href="/tools/promptpay">สร้าง QR พร้อมเพย์</a> · <a href="/tools/withholding-tax">คำนวณหัก ณ ที่จ่าย</a> · <a href="/tools/vat">คำนวณ VAT 7%</a></p>
+</div>
+</main>
+<footer>
+  เครื่องมือฟรีโดย <a href="/">ลำพูน AI Tech</a> · <a href="https://www.facebook.com/profile.php?id=61592915202550" target="_blank" rel="noopener">Facebook Page</a> · <a href="https://github.com/Aecaichang/lamphun-free-tools" target="_blank" rel="noopener">โค้ดบน GitHub (MIT)</a>
+</footer>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const num = v => {
+  const n = Number(String(v).trim().replace(/,/g, ''));
+  return isFinite(n) && n >= 0 ? n : 0;
+};
+
+/* ต้นทุนวัตถุดิบหนึ่งตัว — ปริมาณที่ซื้อเป็น 0 ถือว่ายังกรอกไม่ครบ ไม่ใช่หารด้วยศูนย์ */
+function ingredientCost(buyPrice, buyQty, usedQty){
+  if (buyQty <= 0) return 0;
+  return buyPrice / buyQty * usedQty;
+}
+
+function summarize(ingredients, extra, price){
+  const ingTotal = ingredients.reduce((sum, i) => sum + ingredientCost(i.buyPrice, i.buyQty, i.usedQty), 0);
+  const cost = ingTotal + extra;
+  const profit = price - cost;
+  return { ingTotal, cost, profit, margin: price > 0 ? profit / price * 100 : null };
+}
+
+/* self-check: เมล็ด 500 บ./1000 ก. ใช้ 18 ก. = 9 บ. + นม 60 บ./1000 มล. ใช้ 150 มล. = 9 บ.
+   รวมวัตถุดิบ 18 + แก้ว 5 = 23 ขาย 65 เหลือกำไร 42 คิดเป็น 64.6% */
+(function selftest(){
+  const s = summarize(
+    [{ buyPrice: 500, buyQty: 1000, usedQty: 18 }, { buyPrice: 60, buyQty: 1000, usedQty: 150 }],
+    5, 65
+  );
+  console.assert(Math.abs(s.ingTotal - 18) < 0.005, 'ต้นทุนวัตถุดิบผิด', s);
+  console.assert(Math.abs(s.cost - 23) < 0.005, 'ต้นทุนรวมผิด', s);
+  console.assert(Math.abs(s.profit - 42) < 0.005, 'กำไรผิด', s);
+  console.assert(Math.abs(s.margin - 64.615) < 0.01, 'เปอร์เซ็นต์กำไรผิด', s);
+  console.assert(ingredientCost(500, 0, 18) === 0, 'ปริมาณที่ซื้อเป็น 0 ต้องได้ 0 ไม่ใช่ Infinity');
+})();
+
+const PLACEHOLDERS = [
+  { name: 'เมล็ดกาแฟ', buyPrice: '500', buyQty: '1000', usedQty: '18' },
+  { name: 'นมสด', buyPrice: '60', buyQty: '1000', usedQty: '150' }
+];
+
+function addRow(seed){
+  const row = document.createElement('div');
+  row.className = 'ing';
+  row.innerHTML = `
+    <div class="grid">
+      <div class="cell"><label>วัตถุดิบ</label><input class="i-name" autocomplete="off" placeholder="${seed ? seed.name : 'เช่น ไซรัป'}"></div>
+      <div class="cell"><label>ราคาที่ซื้อ (บาท)</label><input class="i-price" inputmode="decimal" autocomplete="off" placeholder="${seed ? seed.buyPrice : '0'}"></div>
+      <div class="cell"><label>ปริมาณที่ซื้อ</label><input class="i-qty" inputmode="decimal" autocomplete="off" placeholder="${seed ? seed.buyQty : '0'}"></div>
+      <div class="cell"><label>ใช้ต่อเมนู</label><input class="i-used" inputmode="decimal" autocomplete="off" placeholder="${seed ? seed.usedQty : '0'}"></div>
+    </div>
+    <div class="foot"><span>ต้นทุนวัตถุดิบนี้ <b class="i-cost">0.00</b> บาท</span><button class="btn-link" type="button">ลบแถวนี้</button></div>`;
+  row.querySelector('.btn-link').addEventListener('click', () => { row.remove(); render(); });
+  row.addEventListener('input', render);
+  $('rows').appendChild(row);
+}
+
+function readRows(){
+  return [...document.querySelectorAll('.ing')].map(row => ({
+    row,
+    buyPrice: num(row.querySelector('.i-price').value),
+    buyQty: num(row.querySelector('.i-qty').value),
+    usedQty: num(row.querySelector('.i-used').value)
+  }));
+}
+
+function render(){
+  const ingredients = readRows();
+  ingredients.forEach(i => {
+    i.row.querySelector('.i-cost').textContent = fmt(ingredientCost(i.buyPrice, i.buyQty, i.usedQty));
+  });
+
+  const price = num($('price').value);
+  const s = summarize(ingredients, num($('extra').value), price);
+
+  $('r-ing').textContent = fmt(s.ingTotal);
+  $('r-extra').textContent = fmt(num($('extra').value));
+  $('r-cost').textContent = fmt(s.cost);
+  $('r-price').textContent = price > 0 ? fmt(price) : '—';
+
+  const profitRow = $('r-profit-row');
+  profitRow.classList.remove('up', 'down');
+  if (price <= 0){
+    $('r-profit').textContent = '—';
+    $('verdict').textContent = 'กรอกราคาขายเพื่อดูกำไรต่อเมนู';
+    return;
+  }
+  $('r-profit').textContent = fmt(s.profit);
+  profitRow.classList.add(s.profit >= 0 ? 'up' : 'down');
+  $('verdict').textContent = s.profit >= 0
+    ? `กำไร ${s.margin.toFixed(1)}% ของราคาขาย — ต้นทุนคิดเป็น ${(100 - s.margin).toFixed(1)}%`
+    : `ขาดทุนแก้วละ ${fmt(Math.abs(s.profit))} บาท ต้นทุนสูงกว่าราคาขายอยู่`;
+}
+
+$('add').addEventListener('click', () => { addRow(null); render(); });
+['extra', 'price'].forEach(id => $(id).addEventListener('input', render));
+PLACEHOLDERS.forEach(addRow);
+render();
+</script>
+</body>
+</html>
