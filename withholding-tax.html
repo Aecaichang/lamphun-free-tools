@@ -62,6 +62,24 @@ h1{font-size:26px;margin:0 0 6px}
 .field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
 .field input,.field select{width:100%;border:1px solid var(--line-2);border-radius:8px;
   padding:10px 12px;background:#fff}
+/* dropdown ทำเอง — <select> ของเบราว์เซอร์เปิดลิสต์ด้วย native menu ของ OS
+   ซึ่งไม่ฟัง color-scheme บนบางเบราว์เซอร์ พื้นเลยกลายเป็นสีดำตัดกับหน้าเว็บ */
+.picker{position:relative}
+.picker>select{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.picker-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+  text-align:left;font-weight:400;background:#fff;border:1px solid var(--line-2);border-radius:8px;
+  padding:10px 12px;cursor:pointer}
+.picker-btn:hover{border-color:var(--accent)}
+.picker-btn[aria-expanded="true"]{border-color:var(--accent);box-shadow:0 0 0 3px rgba(138,74,36,.13)}
+.picker-btn .chev{flex:none;width:9px;height:9px;margin-right:2px;border-right:2px solid var(--muted);
+  border-bottom:2px solid var(--muted);transform:translateY(-2px) rotate(45deg)}
+.picker-list{position:absolute;z-index:20;top:calc(100% + 6px);left:0;right:0;max-height:300px;
+  overflow:auto;margin:0;padding:6px;list-style:none;background:#fff;
+  border:1px solid var(--line-2);border-radius:10px;box-shadow:0 14px 34px rgba(58,38,20,.2)}
+.picker-list[hidden]{display:none}
+.picker-list li{padding:9px 12px;border-radius:6px;cursor:pointer}
+.picker-list li[aria-selected="true"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:700}
+.picker-list li.active{background:var(--accent);color:#fff}
 .field .hint{color:var(--muted);font-size:12.5px;margin-top:4px}
 .err{color:#a33a1e;font-size:13px;min-height:18px;margin:2px 0 0}
 .result table{width:100%;border-collapse:collapse}
@@ -217,6 +235,120 @@ function render(){
   $(id).addEventListener('input', render);
   $(id).addEventListener('change', render);
 });
+/* สร้าง dropdown ที่สไตล์ได้ ครอบ <select> เดิมไว้ ค่ายังอ่านจาก select.value เหมือนเดิม
+   ครอบ wrapper และย้าย label ให้เอง จึงไม่ต้องแก้ HTML ของหน้าที่เอาไปใช้ */
+function enhanceSelect(select){
+  const wrap = document.createElement('div');
+  wrap.className = 'picker';
+  select.parentNode.insertBefore(wrap, select);
+  wrap.appendChild(select);
+
+  /* <label for> ชี้ไปที่ select ที่ถูกซ่อน คลิกแล้วจะไม่โฟกัสอะไร ย้ายมาผูกกับปุ่มแทน */
+  const lbl = document.querySelector('label[for="' + select.id + '"]');
+  if (lbl){
+    lbl.removeAttribute('for');
+    if (!lbl.id) lbl.id = select.id + '-label';
+  }
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'picker-btn';
+  btn.setAttribute('aria-haspopup', 'listbox');
+  btn.setAttribute('aria-expanded', 'false');
+  const text = document.createElement('span');
+  text.id = select.id + '-text';
+  if (lbl) btn.setAttribute('aria-labelledby', lbl.id + ' ' + text.id);
+  else if (select.getAttribute('aria-label')) btn.setAttribute('aria-label', select.getAttribute('aria-label'));
+  const chev = document.createElement('span');
+  chev.className = 'chev';
+  btn.append(text, chev);
+
+  const list = document.createElement('ul');
+  list.className = 'picker-list';
+  list.setAttribute('role', 'listbox');
+  list.hidden = true;
+  wrap.append(btn, list);
+
+  let items = [];
+  let active = -1;
+
+  function build(){
+    list.textContent = '';
+    items = [...select.options].map(o => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.dataset.value = o.value;
+      li.textContent = o.textContent;
+      list.appendChild(li);
+      return li;
+    });
+    syncLabel();
+  }
+
+  function syncLabel(){
+    text.textContent = select.selectedOptions[0] ? select.selectedOptions[0].textContent : '';
+    items.forEach(li => li.setAttribute('aria-selected', String(li.dataset.value === select.value)));
+  }
+
+  function setActive(i){
+    if (items[active]) items[active].classList.remove('active');
+    active = Math.max(0, Math.min(items.length - 1, i));
+    items[active].classList.add('active');
+    items[active].scrollIntoView({ block: 'nearest' });
+  }
+
+  function open(){
+    if (!list.hidden) return;
+    list.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    setActive(select.selectedIndex);
+  }
+
+  function close(){
+    if (list.hidden) return;
+    list.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    if (items[active]) items[active].classList.remove('active');
+    active = -1;
+  }
+
+  function choose(i){
+    select.selectedIndex = i;
+    select.dispatchEvent(new Event('change'));
+    syncLabel();
+    close();
+    btn.focus();
+  }
+
+  btn.addEventListener('click', () => (list.hidden ? open() : close()));
+  list.addEventListener('click', e => {
+    const li = e.target.closest('li');
+    if (li) choose(items.indexOf(li));
+  });
+  list.addEventListener('mousemove', e => {
+    const li = e.target.closest('li');
+    if (li) setActive(items.indexOf(li));
+  });
+  btn.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      if (list.hidden) open();
+      else setActive(active + (e.key === 'ArrowDown' ? 1 : -1));
+    } else if (e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      if (list.hidden) open(); else choose(active);
+    } else if (e.key === 'Escape'){
+      close();
+    }
+  });
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) close(); });
+
+  build();
+  return { refresh: build };
+}
+
+/* เปลี่ยน <select> ทุกตัวในหน้าเป็น dropdown ที่สไตล์ได้ */
+document.querySelectorAll('select').forEach(enhanceSelect);
 </script>
 </body>
 </html>

@@ -60,7 +60,7 @@ h1{font-size:26px;margin:0 0 6px}
 .grid{display:grid;grid-template-columns:1fr;gap:20px}
 .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
 .field{margin-bottom:16px}
-.field label,.field .label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
 .field input{width:100%;border:1px solid var(--line-2);border-radius:8px;
   padding:10px 12px;background:#fff}
 
@@ -142,22 +142,18 @@ footer a{color:var(--accent-ink)}
 <div class="grid">
   <div class="card">
     <div class="field">
-      <span class="label" id="type-label">รับเงินด้วย</span>
-      <div class="picker">
-        <select id="type">
-          <option value="bank">เลขบัญชีธนาคาร</option>
-          <option value="phone">พร้อมเพย์ — เบอร์โทรศัพท์</option>
-          <option value="id">พร้อมเพย์ — เลขบัตรประชาชน / เลขผู้เสียภาษี</option>
-          <option value="ewallet">e-Wallet ID (15 หลัก)</option>
-        </select>
-      </div>
+      <label for="type">รับเงินด้วย</label>
+      <select id="type">
+        <option value="bank">เลขบัญชีธนาคาร</option>
+        <option value="phone">พร้อมเพย์ — เบอร์โทรศัพท์</option>
+        <option value="id">พร้อมเพย์ — เลขบัตรประชาชน / เลขผู้เสียภาษี</option>
+        <option value="ewallet">e-Wallet ID (15 หลัก)</option>
+      </select>
     </div>
 
     <div class="field" id="bank-field">
-      <span class="label" id="bank-label">ธนาคาร</span>
-      <div class="picker">
-        <select id="bank"></select>
-      </div>
+      <label for="bank">ธนาคาร</label>
+      <select id="bank"></select>
     </div>
 
     <div class="field">
@@ -393,17 +389,30 @@ let currentQrUrl = null;
 
 bankEl.innerHTML = BANKS.map(b => '<option value="' + b[0] + '">' + b[1] + '</option>').join('');
 
-/* สร้าง dropdown ที่สไตล์ได้ ครอบ <select> เดิมไว้ ค่ายังอ่านจาก select.value เหมือนเดิม */
-function enhanceSelect(select, labelId){
-  const wrap = select.parentElement;
+/* สร้าง dropdown ที่สไตล์ได้ ครอบ <select> เดิมไว้ ค่ายังอ่านจาก select.value เหมือนเดิม
+   ครอบ wrapper และย้าย label ให้เอง จึงไม่ต้องแก้ HTML ของหน้าที่เอาไปใช้ */
+function enhanceSelect(select){
+  const wrap = document.createElement('div');
+  wrap.className = 'picker';
+  select.parentNode.insertBefore(wrap, select);
+  wrap.appendChild(select);
+
+  /* <label for> ชี้ไปที่ select ที่ถูกซ่อน คลิกแล้วจะไม่โฟกัสอะไร ย้ายมาผูกกับปุ่มแทน */
+  const lbl = document.querySelector('label[for="' + select.id + '"]');
+  if (lbl){
+    lbl.removeAttribute('for');
+    if (!lbl.id) lbl.id = select.id + '-label';
+  }
+
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.className = 'picker-btn';
   btn.setAttribute('aria-haspopup', 'listbox');
   btn.setAttribute('aria-expanded', 'false');
-  btn.setAttribute('aria-labelledby', labelId + ' ' + select.id + '-text');
   const text = document.createElement('span');
   text.id = select.id + '-text';
+  if (lbl) btn.setAttribute('aria-labelledby', lbl.id + ' ' + text.id);
+  else if (select.getAttribute('aria-label')) btn.setAttribute('aria-label', select.getAttribute('aria-label'));
   const chev = document.createElement('span');
   chev.className = 'chev';
   btn.append(text, chev);
@@ -612,8 +621,7 @@ typeEl.addEventListener('change', syncType);
 bankEl.addEventListener('change', render);
 ['target','shop','footnote'].forEach(id => $(id).addEventListener('input', render));
 
-enhanceSelect(typeEl, 'type-label');
-enhanceSelect(bankEl, 'bank-label');
+document.querySelectorAll('select').forEach(enhanceSelect);
 syncType();
 
 /* ฟอนต์ Sarabun มาจาก CDN — canvas วาดรอบแรกอาจได้ฟอนต์สำรอง วาดซ้ำเมื่อฟอนต์พร้อม */
