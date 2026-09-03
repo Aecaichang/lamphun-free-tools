@@ -328,7 +328,7 @@ function drawPoster(ctx, qr, info){
   ctx.fillStyle = ACCENT;
   ctx.fillRect(0, 0, PAGE_W, 28);
 
-  let y = 190;
+  let y = 205;
   centerText(ctx, 'สแกนจ่ายที่นี่', y, '800', 108, INK);
 
   y += 74;
@@ -340,7 +340,7 @@ function drawPoster(ctx, qr, info){
   }
 
   /* กล่อง QR */
-  const qrSize = 660;
+  const qrSize = 700;
   const boxPad = 30;
   const boxSize = qrSize + boxPad * 2;
   const boxX = (PAGE_W - boxSize) / 2;
@@ -440,7 +440,8 @@ function posterInfo(v){
     });
   }
   if (v.type === 'phone')
-    return Object.assign(base, { kindLabel: 'พร้อมเพย์', line1: 'พร้อมเพย์เบอร์โทรศัพท์', line2: v.target });
+    return Object.assign(base, { kindLabel: 'พร้อมเพย์', line1: 'พร้อมเพย์เบอร์โทรศัพท์',
+      line2: v.target.replace(/^(\d{3})(\d{3})(\d{4})$/, '$1-$2-$3') });
   if (v.type === 'id')
     return Object.assign(base, { kindLabel: 'พร้อมเพย์', line1: 'พร้อมเพย์เลขบัตรประชาชน / เลขผู้เสียภาษี', line2: v.target });
   return Object.assign(base, { kindLabel: 'e-Wallet', line1: 'e-Wallet ID', line2: v.target });
