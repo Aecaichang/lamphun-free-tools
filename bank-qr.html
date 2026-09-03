@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#8a4a24">
+<title>สร้าง QR โอนเงินเข้าบัญชีธนาคาร ฟรี — ไม่ต้องพิมพ์เลขบัญชี | ลำพูน AI Tech</title>
+<meta name="description" content="สร้าง QR ให้ลูกค้าสแกนแล้วโอนเข้าบัญชีธนาคารของคุณ ไม่ต้องพิมพ์เลขบัญชีหรือเลือกธนาคารเอง รองรับพร้อมเพย์เบอร์โทร เลขบัตรประชาชน และ e-Wallet ด้วย ฟรี ไม่ต้องสมัคร">
+<link rel="canonical" href="https://lamphunaitech.aecaichang.com/tools/bank-qr">
+<link rel="icon" href="../favicon-32.png" sizes="32x32">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lamphunaitech.aecaichang.com/tools/bank-qr">
+<meta property="og:site_name" content="ลำพูน AI Tech">
+<meta property="og:title" content="สร้าง QR โอนเข้าบัญชีธนาคาร ฟรี — ลูกค้าไม่ต้องพิมพ์เลขบัญชี">
+<meta property="og:description" content="เลือกธนาคาร ใส่เลขบัญชี ได้ QR ไปติดหน้าร้านทันที ข้อมูลอยู่ในเครื่องคุณเท่านั้น">
+<meta property="og:image" content="https://lamphunaitech.aecaichang.com/assets/cover.jpg">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "สร้าง QR โอนเงินเข้าบัญชีธนาคาร",
+  "url": "https://lamphunaitech.aecaichang.com/tools/bank-qr",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "THB" },
+  "provider": { "@type": "ProfessionalService", "name": "ลำพูน AI Tech", "url": "https://lamphunaitech.aecaichang.com/" }
+}
+</script>
+<style>
+:root{
+  --ink:#2b2018; --accent:#8a4a24; --accent-ink:#6b3717; --accent-soft:#f1e5d3;
+  --muted:#7c6b59; --line:#e5dac7; --line-2:#cdbca2; --paper:#f3ebdd;
+  --warn-bg:#fdf3e3; --warn-line:#e0b878; --warn-ink:#7a4a10;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Sarabun","TH Sarabun New","Leelawadee UI","Noto Sans Thai",sans-serif;
+  font-size:15px;line-height:1.65}
+input,select,button{font:inherit;color:inherit}
+input:focus,select:focus{outline:2px solid var(--line-2);outline-offset:1px;border-radius:3px}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);
+  padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
+  box-shadow:0 2px 10px rgba(58,38,20,.07)}
+.bar .brand{font-weight:800;text-decoration:none;color:var(--ink)}
+.bar .crumb{color:var(--muted);font-size:13px}
+.bar .crumb a{color:var(--accent-ink)}
+main{max-width:860px;margin:0 auto;padding:26px 16px 60px}
+h1{font-size:26px;margin:0 0 6px}
+.lede{color:var(--muted);margin:0 0 18px}
+.notice{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);
+  border-radius:10px;padding:12px 14px;margin:0 0 20px;font-size:13.5px}
+.notice strong{color:var(--warn-ink)}
+.grid{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field input,.field select{width:100%;border:1px solid var(--line-2);border-radius:8px;
+  padding:10px 12px;background:#fff}
+.field .hint{color:var(--muted);font-size:12.5px;margin-top:4px}
+.err{color:#a33a1e;font-size:13px;min-height:18px;margin:2px 0 0}
+.qr-card{text-align:center}
+.qr-box{background:#fff;display:inline-block;padding:10px;border-radius:8px}
+#qr img,#qr canvas{display:block;width:240px;height:240px;image-rendering:pixelated}
+.qr-empty{width:240px;height:240px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);font-size:13.5px;border:1.5px dashed var(--line-2);border-radius:8px;padding:16px}
+.amt-label{font-weight:800;font-size:18px;margin:10px 0 2px}
+.acct-label{color:var(--muted);font-size:13px;margin:0 0 12px;word-break:break-word}
+.btn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:8px;cursor:pointer;
+  padding:10px 18px;font-weight:700;text-decoration:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-ink)}
+.btn-primary[disabled]{opacity:.45;cursor:not-allowed}
+.payload{margin-top:12px;font-size:11.5px;color:var(--muted);word-break:break-all;
+  text-align:left;background:var(--accent-soft);border-radius:6px;padding:8px;display:none}
+.payload.on{display:block}
+.toggle{background:none;border:0;color:var(--accent-ink);font-size:12.5px;cursor:pointer;
+  text-decoration:underline;padding:4px}
+.prose{margin-top:34px}
+.prose h2{font-size:19px;margin:26px 0 8px}
+.prose p,.prose li{color:#4a3c2e}
+.fine{color:var(--muted);font-size:12.5px}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 16px;text-align:center;
+  color:var(--muted);font-size:13px}
+footer a{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a class="brand" href="/">ลำพูน AI Tech</a>
+  <span class="crumb"><a href="/#tools">เครื่องมือฟรี</a> / QR โอนเข้าบัญชี</span>
+</div>
+<main>
+<h1>สร้าง QR โอนเงินเข้าบัญชีธนาคาร ฟรี</h1>
+<p class="lede">ลูกค้าสแกนแล้วแอปธนาคารเติมชื่อธนาคารและเลขบัญชีให้เอง ไม่ต้องพิมพ์เลขบัญชีตามป้ายอีกต่อไป — ทุกอย่างคำนวณในเครื่องคุณ ไม่มีข้อมูลถูกส่งไปที่ไหน</p>
+
+<div class="notice" id="notice">
+  <strong>อ่านก่อนใช้:</strong> QR แบบ “เลขบัญชีธนาคาร” เป็นช่องที่มีอยู่จริงในมาตรฐาน Thai QR Payment ของธนาคารแห่งประเทศไทย
+  แต่แอปธนาคารแต่ละแห่งรองรับไม่เท่ากัน บางแอปสแกนแล้วขึ้นหน้าโอนได้เลย บางแอปฟ้องว่า QR ไม่ถูกต้อง
+  <strong>ทดสอบสแกนด้วยแอปที่ลูกค้าส่วนใหญ่ใช้ก่อนพิมพ์ป้ายติดหน้าร้าน</strong>
+  ถ้าแอปไม่รับ ให้สลับไปใช้แบบพร้อมเพย์ (เบอร์โทร / เลขบัตรประชาชน) ซึ่งทุกแอปรองรับแน่นอน
+</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="field">
+      <label for="type">รับเงินด้วย</label>
+      <select id="type">
+        <option value="bank">เลขบัญชีธนาคาร</option>
+        <option value="phone">พร้อมเพย์ — เบอร์โทรศัพท์</option>
+        <option value="id">พร้อมเพย์ — เลขบัตรประชาชน / เลขผู้เสียภาษี</option>
+        <option value="ewallet">e-Wallet ID (15 หลัก)</option>
+      </select>
+    </div>
+
+    <div class="field" id="bank-field">
+      <label for="bank">ธนาคาร</label>
+      <select id="bank"></select>
+    </div>
+
+    <div class="field">
+      <label for="target" id="target-label">เลขที่บัญชี</label>
+      <input id="target" inputmode="numeric" autocomplete="off" placeholder="เช่น 1234567890">
+      <p class="hint" id="target-hint">กรอกเฉพาะตัวเลข ไม่ต้องใส่ขีด</p>
+      <p class="err" id="target-err"></p>
+    </div>
+
+    <div class="field">
+      <label for="amount">ยอดเงิน (บาท) — เว้นว่างได้ ให้คนจ่ายกรอกเอง</label>
+      <input id="amount" inputmode="decimal" autocomplete="off" placeholder="เช่น 150.00">
+      <p class="err" id="amount-err"></p>
+    </div>
+
+    <p class="fine">เครื่องมือนี้สร้าง QR ตามมาตรฐาน EMVCo / Thai QR Payment ตัวเลขที่กรอกจะไม่ถูกบันทึกหรือส่งออกจากเครื่องคุณ</p>
+  </div>
+
+  <div class="card qr-card">
+    <div class="qr-box" id="qr-box">
+      <div id="qr"><div class="qr-empty">เลือกธนาคารและกรอกเลขบัญชีเพื่อสร้าง QR</div></div>
+    </div>
+    <p class="amt-label" id="amt-label">&nbsp;</p>
+    <p class="acct-label" id="acct-label">&nbsp;</p>
+    <button class="btn btn-primary" id="dl" disabled>ดาวน์โหลดรูป QR</button>
+    <div><button class="toggle" id="show-payload" hidden>ดูข้อมูลดิบใน QR (สำหรับตรวจสอบ)</button></div>
+    <div class="payload" id="payload"></div>
+  </div>
+</div>
+
+<div class="prose">
+  <h2>ทำไมต้องมี QR แบบเลขบัญชี</h2>
+  <p>ร้านที่ไม่ได้ผูกพร้อมเพย์ หรืออยากให้เงินเข้าบัญชีนิติบุคคลโดยตรง ปกติต้องเขียนป้าย “ธนาคาร X เลขที่ Y” ให้ลูกค้ายืนพิมพ์เอง ซึ่งช้าและพิมพ์ผิดง่าย มาตรฐาน Thai QR Payment มีช่องเก็บ “รหัสธนาคาร + เลขบัญชี” อยู่แล้ว (Tag 29 ช่องย่อย 04) เครื่องมือนี้ประกอบช่องนั้นให้</p>
+  <h2>ถ้าสแกนแล้วแอปไม่รับ ทำยังไง</h2>
+  <p>แปลว่าแอปธนาคารนั้นยังไม่รองรับช่อง 04 ไม่ใช่ QR ผิด ให้เปลี่ยนไปสร้างแบบพร้อมเพย์ด้วยเบอร์โทรหรือเลขบัตรประชาชนแทน ซึ่งแอปธนาคารไทยทุกแห่งรองรับ เงินเข้าบัญชีเดียวกันกับที่ผูกพร้อมเพย์ไว้</p>
+  <h2>ปลอดภัยไหม</h2>
+  <p>QR นี้เก็บแค่ข้อมูล “รับเงิน” คนที่สแกนทำได้อย่างเดียวคือโอนเข้าบัญชีคุณ ดูดเงินออกไม่ได้ และหน้านี้ทำงานในเบราว์เซอร์ของคุณทั้งหมด ไม่มีการส่งหรือเก็บข้อมูล</p>
+  <h2>เครื่องมือฟรีตัวอื่นของเรา</h2>
+  <p><a href="/tools/promptpay">สร้าง QR พร้อมเพย์</a> · <a href="/tools/quotation">ใบเสนอราคา / ใบแจ้งหนี้ / ใบเสร็จ</a> · <a href="/tools/withholding-tax">คำนวณหัก ณ ที่จ่าย</a> · <a href="/tools/vat">คำนวณ VAT 7%</a> · <a href="/tools/cost-per-unit">คำนวณต้นทุนต่อแก้ว / ต่อจาน</a></p>
+</div>
+</main>
+<footer>
+  เครื่องมือฟรีโดย <a href="/">ลำพูน AI Tech</a> · <a href="https://www.facebook.com/profile.php?id=61592915202550" target="_blank" rel="noopener">Facebook Page</a> · <a href="https://github.com/Aecaichang/lamphun-free-tools" target="_blank" rel="noopener">โค้ดบน GitHub (MIT)</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+'use strict';
+/* ---- Thai QR Payment (EMVCo) payload ----
+   Tag 29 sub-tags: 01 เบอร์มือถือ / 02 เลขบัตรประชาชน / 03 e-Wallet / 04 รหัสธนาคาร+เลขบัญชี */
+const PROMPTPAY_AID = 'A000000677010111';
+const MAX_AMOUNT = 9999999;
+const BANK_ACCOUNT_WIRE_MAX = 43; /* 3 หลักรหัสธนาคาร + เลขบัญชี, ตามสเปค */
+
+/* รหัสธนาคาร 3 หลักตามระบบ SMART ของ ธปท. */
+const BANKS = [
+  ['002', 'ธนาคารกรุงเทพ (BBL)'],
+  ['004', 'ธนาคารกสิกรไทย (KBANK)'],
+  ['006', 'ธนาคารกรุงไทย (KTB)'],
+  ['011', 'ธนาคารทหารไทยธนชาต (ttb)'],
+  ['014', 'ธนาคารไทยพาณิชย์ (SCB)'],
+  ['025', 'ธนาคารกรุงศรีอยุธยา (BAY)'],
+  ['030', 'ธนาคารออมสิน (GSB)'],
+  ['033', 'ธนาคารอาคารสงเคราะห์ (GHB)'],
+  ['034', 'ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร (ธ.ก.ส.)'],
+  ['022', 'ธนาคารซีไอเอ็มบี ไทย (CIMBT)'],
+  ['024', 'ธนาคารยูโอบี (UOB)'],
+  ['066', 'ธนาคารอิสลามแห่งประเทศไทย (IBANK)'],
+  ['067', 'ธนาคารทิสโก้ (TISCO)'],
+  ['069', 'ธนาคารเกียรตินาคินภัทร (KKP)'],
+  ['070', 'ธนาคารไอซีบีซี (ไทย) (ICBCT)'],
+  ['071', 'ธนาคารไทยเครดิต (TCRB)'],
+  ['073', 'ธนาคารแลนด์ แอนด์ เฮ้าส์ (LH Bank)'],
+  ['098', 'ธนาคารพัฒนาวิสาหกิจฯ (SME D Bank)'],
+  ['017', 'ซิตี้แบงก์ (Citibank)'],
+  ['020', 'สแตนดาร์ดชาร์เตอร์ด (ไทย)'],
+  ['031', 'เอชเอสบีซี (HSBC)'],
+  ['018', 'ซูมิโตโม มิตซุย (SMBC)'],
+  ['039', 'มิซูโฮ (Mizuho)'],
+  ['080', 'ซูมิโตโม มิตซุย ทรัสต์ (ไทย)']
+];
+
+function tlv(id, value){
+  return id + String(value.length).padStart(2, '0') + value;
+}
+
+/* CRC16-CCITT (poly 0x1021, init 0xFFFF) ตามสเปค EMVCo */
+function crc16(str){
+  let crc = 0xFFFF;
+  for (let i = 0; i < str.length; i++){
+    crc ^= str.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++){
+      crc = crc & 0x8000 ? (crc << 1) ^ 0x1021 : crc << 1;
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+
+/* คืนค่า { subTag, value } ของช่องย่อยใน Tag 29 */
+function proxyField(type, target, bankCode){
+  if (type === 'phone')   return { subTag: '01', value: '0066' + target.slice(1) };
+  if (type === 'id')      return { subTag: '02', value: target };
+  if (type === 'ewallet') return { subTag: '03', value: target };
+  return { subTag: '04', value: bankCode + target };
+}
+
+function buildPayload(type, target, amount, bankCode){
+  const proxy = proxyField(type, target, bankCode);
+  let p =
+    tlv('00', '01') +
+    tlv('01', amount ? '12' : '11') +
+    tlv('29', tlv('00', PROMPTPAY_AID) + tlv(proxy.subTag, proxy.value)) +
+    tlv('53', '764');
+  if (amount) p += tlv('54', amount.toFixed(2));
+  p += tlv('58', 'TH');
+  p += '6304';
+  return p + crc16(p);
+}
+
+/* self-check โครงสร้าง payload — ถ้าพังจะเห็นใน console */
+(function(){
+  const bank = buildPayload('bank', '1234567890', null, '014');
+  console.assert(bank.startsWith('000201010211'), 'header ของแบบเลขบัญชีผิด: ' + bank);
+  console.assert(bank.includes('04130141234567890'), 'ช่อง 04 (รหัสธนาคาร+เลขบัญชี) ผิด: ' + bank);
+  console.assert(/6304[0-9A-F]{4}$/.test(bank), 'CRC ท้าย payload ผิด');
+
+  const phone = buildPayload('phone', '0812345678', 100, null);
+  console.assert(phone.startsWith('000201010212'), 'header ของแบบมียอดเงินผิด');
+  console.assert(phone.includes('01130066812345678'), 'ช่อง 01 (เบอร์โทร) ผิด: ' + phone);
+  console.assert(phone.includes('5406100.00'), 'ช่อง 54 (ยอดเงิน) ผิด: ' + phone);
+})();
+
+/* ---- UI ---- */
+const $ = id => document.getElementById(id);
+const typeEl = $('type'), bankEl = $('bank'), targetEl = $('target'), amountEl = $('amount');
+let currentDataUrl = null;
+
+bankEl.innerHTML = BANKS.map(b => '<option value="' + b[0] + '">' + b[1] + '</option>').join('');
+
+const LABELS = {
+  bank:    { label: 'เลขที่บัญชี', ph: 'เช่น 1234567890',   hint: 'กรอกเฉพาะตัวเลข ไม่ต้องใส่ขีด' },
+  phone:   { label: 'เบอร์โทรศัพท์', ph: '08x-xxx-xxxx',     hint: 'เบอร์ที่ผูกพร้อมเพย์ไว้' },
+  id:      { label: 'เลขบัตรประชาชน / เลขผู้เสียภาษี', ph: '1-2345-67890-12-3', hint: '13 หลัก' },
+  ewallet: { label: 'e-Wallet ID', ph: '15 หลัก',            hint: 'เลข e-Wallet 15 หลักที่ผู้ให้บริการออกให้' }
+};
+
+function validate(){
+  const type = typeEl.value;
+  const raw = targetEl.value.replace(/\D/g, '');
+  const amtRaw = amountEl.value.trim();
+  let targetErr = '', amountErr = '';
+
+  if (raw && type === 'phone' && !/^0\d{9}$/.test(raw))
+    targetErr = 'เบอร์โทรต้องมี 10 หลัก ขึ้นต้นด้วย 0';
+  if (raw && type === 'id' && raw.length !== 13)
+    targetErr = 'เลขบัตรประชาชน / เลขผู้เสียภาษีต้องมี 13 หลัก';
+  if (raw && type === 'ewallet' && raw.length !== 15)
+    targetErr = 'e-Wallet ID ต้องมี 15 หลัก';
+  if (raw && type === 'bank'){
+    if (raw.length < 4) targetErr = 'เลขที่บัญชีสั้นเกินไป';
+    else if (raw.length + 3 > BANK_ACCOUNT_WIRE_MAX) targetErr = 'เลขที่บัญชียาวเกินมาตรฐาน';
+  }
+
+  let amount = null;
+  if (amtRaw){
+    amount = Number(amtRaw.replace(/,/g, ''));
+    if (!isFinite(amount) || amount <= 0) { amountErr = 'ยอดเงินต้องเป็นตัวเลขมากกว่า 0'; amount = null; }
+    else if (amount > MAX_AMOUNT) { amountErr = 'ยอดเงินสูงเกินไป'; amount = null; }
+  }
+
+  $('target-err').textContent = targetErr;
+  $('amount-err').textContent = amountErr;
+  return { ok: !!raw && !targetErr && !amountErr, type, target: raw, amount, amtGiven: !!amtRaw };
+}
+
+function describe(v){
+  if (v.type === 'bank'){
+    const name = BANKS.find(b => b[0] === bankEl.value);
+    return (name ? name[1] : bankEl.value) + ' · ' + v.target;
+  }
+  if (v.type === 'phone')   return 'พร้อมเพย์เบอร์ ' + v.target;
+  if (v.type === 'id')      return 'พร้อมเพย์เลขบัตร ' + v.target;
+  return 'e-Wallet ' + v.target;
+}
+
+function reset(msg){
+  $('qr').innerHTML = '<div class="qr-empty">' + msg + '</div>';
+  $('amt-label').innerHTML = '&nbsp;';
+  $('acct-label').innerHTML = '&nbsp;';
+  $('dl').disabled = true;
+  $('show-payload').hidden = true;
+  $('payload').classList.remove('on');
+  currentDataUrl = null;
+}
+
+function render(){
+  const v = validate();
+  if (!v.ok || (v.amtGiven && v.amount === null)){
+    reset(v.type === 'bank' ? 'เลือกธนาคารและกรอกเลขบัญชีเพื่อสร้าง QR' : 'กรอกข้อมูลเพื่อสร้าง QR');
+    return;
+  }
+  const payload = buildPayload(v.type, v.target, v.amount, bankEl.value);
+  const qr = qrcode(0, 'M');
+  qr.addData(payload);
+  qr.make();
+  $('qr').innerHTML = qr.createImgTag(6, 8);
+  currentDataUrl = $('qr').querySelector('img').src;
+  $('amt-label').textContent = v.amount
+    ? v.amount.toLocaleString('th-TH', { minimumFractionDigits: 2 }) + ' บาท'
+    : 'ไม่ระบุยอด (คนจ่ายกรอกเอง)';
+  $('acct-label').textContent = describe(v);
+  $('payload').textContent = payload;
+  $('dl').disabled = false;
+  $('show-payload').hidden = false;
+}
+
+function syncType(){
+  const t = typeEl.value;
+  $('bank-field').hidden = t !== 'bank';
+  $('target-label').textContent = LABELS[t].label;
+  targetEl.placeholder = LABELS[t].ph;
+  $('target-hint').textContent = LABELS[t].hint;
+  $('notice').hidden = t !== 'bank';
+  render();
+}
+
+$('dl').addEventListener('click', () => {
+  if (!currentDataUrl) return;
+  const a = document.createElement('a');
+  a.href = currentDataUrl;
+  a.download = 'bank-transfer-qr.gif';
+  a.click();
+});
+$('show-payload').addEventListener('click', () => $('payload').classList.toggle('on'));
+typeEl.addEventListener('change', syncType);
+bankEl.addEventListener('change', render);
+targetEl.addEventListener('input', render);
+amountEl.addEventListener('input', render);
+syncType();
+</script>
+</body>
+</html>
