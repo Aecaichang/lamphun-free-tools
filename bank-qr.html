@@ -147,12 +147,6 @@ footer a{color:var(--accent-ink)}
     </div>
 
     <div class="field">
-      <label for="amount">ยอดเงิน (บาท) — เว้นว่างได้ ให้คนจ่ายกรอกเอง</label>
-      <input id="amount" inputmode="decimal" autocomplete="off" placeholder="เช่น 150.00">
-      <p class="err" id="amount-err"></p>
-    </div>
-
-    <div class="field">
       <label for="shop">ชื่อร้าน / ชื่อบัญชี ที่จะขึ้นบนป้าย — เว้นว่างได้</label>
       <input id="shop" autocomplete="off" maxlength="40" placeholder="เช่น ร้านกาแฟบ้านสวน">
       <p class="hint">ชื่อนี้ขึ้นบนป้ายอย่างเดียว ไม่ได้ฝังลงใน QR</p>
@@ -198,7 +192,6 @@ footer a{color:var(--accent-ink)}
 /* ---- Thai QR Payment (EMVCo) payload ----
    Tag 29 sub-tags: 01 เบอร์มือถือ / 02 เลขบัตรประชาชน / 03 e-Wallet / 04 รหัสธนาคาร+เลขบัญชี */
 const PROMPTPAY_AID = 'A000000677010111';
-const MAX_AMOUNT = 9999999;
 const BANK_ACCOUNT_WIRE_MAX = 43; /* 3 หลักรหัสธนาคาร + เลขบัญชี, ตามสเปค */
 
 /* รหัสธนาคาร 3 หลักตามระบบ SMART ของ ธปท. */
@@ -254,30 +247,30 @@ function proxyField(type, target, bankCode){
   return { subTag: '04', value: bankCode + target };
 }
 
-function buildPayload(type, target, amount, bankCode){
+/* ป้ายนี้เป็น QR แบบตั้งโชว์ ลูกค้ากรอกยอดเองในแอป จึงเป็น static (tag 01 = 11)
+   และไม่มี tag 54 เสมอ */
+function buildPayload(type, target, bankCode){
   const proxy = proxyField(type, target, bankCode);
-  let p =
+  const p =
     tlv('00', '01') +
-    tlv('01', amount ? '12' : '11') +
+    tlv('01', '11') +
     tlv('29', tlv('00', PROMPTPAY_AID) + tlv(proxy.subTag, proxy.value)) +
-    tlv('53', '764');
-  if (amount) p += tlv('54', amount.toFixed(2));
-  p += tlv('58', 'TH');
-  p += '6304';
+    tlv('53', '764') +
+    tlv('58', 'TH') +
+    '6304';
   return p + crc16(p);
 }
 
 /* self-check โครงสร้าง payload — ถ้าพังจะเห็นใน console */
 (function(){
-  const bank = buildPayload('bank', '1234567890', null, '014');
+  const bank = buildPayload('bank', '1234567890', '014');
   console.assert(bank.startsWith('000201010211'), 'header ของแบบเลขบัญชีผิด: ' + bank);
   console.assert(bank.includes('04130141234567890'), 'ช่อง 04 (รหัสธนาคาร+เลขบัญชี) ผิด: ' + bank);
+  console.assert(!bank.includes('5406'), 'ไม่ควรมีช่อง 54 (ยอดเงิน) ใน QR ตั้งโชว์: ' + bank);
   console.assert(/6304[0-9A-F]{4}$/.test(bank), 'CRC ท้าย payload ผิด');
 
-  const phone = buildPayload('phone', '0812345678', 100, null);
-  console.assert(phone.startsWith('000201010212'), 'header ของแบบมียอดเงินผิด');
+  const phone = buildPayload('phone', '0812345678', null);
   console.assert(phone.includes('01130066812345678'), 'ช่อง 01 (เบอร์โทร) ผิด: ' + phone);
-  console.assert(phone.includes('5406100.00'), 'ช่อง 54 (ยอดเงิน) ผิด: ' + phone);
 })();
 
 /* ---- ป้าย A4 บน canvas (1240×1754 = A4 ที่ 150 dpi) ---- */
@@ -376,7 +369,7 @@ function drawPoster(ctx, qr, info){
 
 /* ---- UI ---- */
 const $ = id => document.getElementById(id);
-const typeEl = $('type'), bankEl = $('bank'), targetEl = $('target'), amountEl = $('amount');
+const typeEl = $('type'), bankEl = $('bank'), targetEl = $('target');
 let currentQrUrl = null;
 
 bankEl.innerHTML = BANKS.map(b => '<option value="' + b[0] + '">' + b[1] + '</option>').join('');
@@ -391,8 +384,7 @@ const LABELS = {
 function validate(){
   const type = typeEl.value;
   const raw = targetEl.value.replace(/\D/g, '');
-  const amtRaw = amountEl.value.trim();
-  let targetErr = '', amountErr = '';
+  let targetErr = '';
 
   if (raw && type === 'phone' && !/^0\d{9}$/.test(raw))
     targetErr = 'เบอร์โทรต้องมี 10 หลัก ขึ้นต้นด้วย 0';
@@ -405,16 +397,8 @@ function validate(){
     else if (raw.length + 3 > BANK_ACCOUNT_WIRE_MAX) targetErr = 'เลขที่บัญชียาวเกินมาตรฐาน';
   }
 
-  let amount = null;
-  if (amtRaw){
-    amount = Number(amtRaw.replace(/,/g, ''));
-    if (!isFinite(amount) || amount <= 0) { amountErr = 'ยอดเงินต้องเป็นตัวเลขมากกว่า 0'; amount = null; }
-    else if (amount > MAX_AMOUNT) { amountErr = 'ยอดเงินสูงเกินไป'; amount = null; }
-  }
-
   $('target-err').textContent = targetErr;
-  $('amount-err').textContent = amountErr;
-  return { ok: !!raw && !targetErr && !amountErr, type, target: raw, amount, amtGiven: !!amtRaw };
+  return { ok: !!raw && !targetErr, type, target: raw };
 }
 
 /* จัดกลุ่มเลขบัญชีเป็น 3-1-5-1 ให้อ่านง่ายเวลาลูกค้าพิมพ์เอง */
@@ -423,13 +407,10 @@ function groupAccount(n){
 }
 
 function posterInfo(v){
-  const amountLabel = v.amount
-    ? 'ยอดชำระ ' + v.amount.toLocaleString('th-TH', { minimumFractionDigits: 2 }) + ' บาท'
-    : 'กรอกยอดเงินเองตอนสแกน';
   const base = {
     shop: $('shop').value.trim(),
     footnote: $('footnote').value.trim(),
-    amountLabel
+    amountLabel: 'สแกนแล้วกรอกยอดเงินในแอปธนาคาร'
   };
   if (v.type === 'bank'){
     const bank = BANKS.find(b => b[0] === bankEl.value);
@@ -461,11 +442,11 @@ function reset(msg){
 
 function render(){
   const v = validate();
-  if (!v.ok || (v.amtGiven && v.amount === null)){
+  if (!v.ok){
     reset(v.type === 'bank' ? 'เลือกธนาคารและกรอกเลขบัญชีเพื่อสร้างป้าย' : 'กรอกข้อมูลเพื่อสร้างป้าย');
     return;
   }
-  const payload = buildPayload(v.type, v.target, v.amount, bankEl.value);
+  const payload = buildPayload(v.type, v.target, bankEl.value);
   const qr = qrcode(0, 'M');
   qr.addData(payload);
   qr.make();
@@ -513,7 +494,7 @@ $('dl-qr').addEventListener('click', () => {
 $('show-payload').addEventListener('click', () => $('payload').classList.toggle('on'));
 typeEl.addEventListener('change', syncType);
 bankEl.addEventListener('change', render);
-['target','amount','shop','footnote'].forEach(id => $(id).addEventListener('input', render));
+['target','shop','footnote'].forEach(id => $(id).addEventListener('input', render));
 syncType();
 
 /* ฟอนต์ Sarabun มาจาก CDN — canvas วาดรอบแรกอาจได้ฟอนต์สำรอง วาดซ้ำเมื่อฟอนต์พร้อม */
