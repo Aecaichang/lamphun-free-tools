@@ -349,18 +349,15 @@ function drawPoster(ctx, qr, info){
   y += 84;
   centerText(ctx, info.line2, y, '800', 78, INK, PAGE_W - MARGIN * 2);
 
-  y += 76;
-  ctx.strokeStyle = LINE;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(MARGIN, y); ctx.lineTo(PAGE_W - MARGIN, y); ctx.stroke();
-
-  y += 76;
-  centerText(ctx, info.amountLabel, y, '800', 58, ACCENT, PAGE_W - MARGIN * 2);
-
   if (info.footnote){
-    y += 66;
-    centerText(ctx, info.footnote, y, '400', 38, MUTED, PAGE_W - MARGIN * 2);
+    y += 76;
+    ctx.strokeStyle = LINE;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(MARGIN, y); ctx.lineTo(PAGE_W - MARGIN, y); ctx.stroke();
+
+    y += 78;
+    centerText(ctx, info.footnote, y, '600', 44, MUTED, PAGE_W - MARGIN * 2);
   }
 
   centerText(ctx, 'สร้างป้ายฟรีที่ lamphunaitech.aecaichang.com/tools/bank-qr',
@@ -409,8 +406,7 @@ function groupAccount(n){
 function posterInfo(v){
   const base = {
     shop: $('shop').value.trim(),
-    footnote: $('footnote').value.trim(),
-    amountLabel: 'สแกนแล้วกรอกยอดเงินในแอปธนาคาร'
+    footnote: $('footnote').value.trim()
   };
   if (v.type === 'bank'){
     const bank = BANKS.find(b => b[0] === bankEl.value);
