@@ -60,7 +60,23 @@ h1{font-size:26px;margin:0 0 6px}
 .grid{display:grid;grid-template-columns:1fr;gap:20px}
 .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
 .field{margin-bottom:16px}
-.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field label,.field .label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field input[type=range]{width:100%;accent-color:var(--accent);padding:0;border:0;background:none}
+
+/* เลือกสไตล์ป้าย — ปุ่มพรีวิวสีจริงของแต่ละธีม */
+.themes{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.theme-btn{display:flex;align-items:center;gap:8px;padding:7px 9px;cursor:pointer;
+  border:1.5px solid var(--line-2);border-radius:9px;background:#fff;font-size:13px;text-align:left}
+.theme-btn:hover{border-color:var(--accent)}
+.theme-btn[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
+.theme-swatch{flex:none;width:22px;height:26px;border-radius:4px;border:1px solid rgba(0,0,0,.15);
+  position:relative;overflow:hidden}
+.theme-swatch i{position:absolute;left:0;right:0;top:0;height:5px;display:block}
+
+.file-row{display:flex;gap:8px;flex-wrap:wrap}
+.file-row .btn{width:auto;max-width:none;margin:0}
+.file-btn{position:relative;overflow:hidden}
+.file-btn input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .field input{width:100%;border:1px solid var(--line-2);border-radius:8px;
   padding:10px 12px;background:#fff}
 
@@ -109,6 +125,8 @@ h1{font-size:26px;margin:0 0 6px}
 .btn-ghost{background:#fff;color:var(--accent-ink);border:1px solid var(--line-2);font-weight:600}
 .btn-ghost:hover{background:var(--accent-soft)}
 .btn[disabled]{opacity:.45;cursor:not-allowed}
+/* display:inline-flex ข้างบนทับ [hidden] ของเบราว์เซอร์ ต้องสั่งซ่อนเอง */
+.btn[hidden]{display:none}
 .payload{margin-top:12px;font-size:11.5px;color:var(--muted);word-break:break-all;
   text-align:left;background:var(--accent-soft);border-radius:6px;padding:8px;display:none}
 .payload.on{display:block}
@@ -179,6 +197,30 @@ footer a{color:var(--accent-ink)}
       <input id="footnote" autocomplete="off" maxlength="60" value="โอนแล้วกรุณาแจ้งพนักงานก่อนรับสินค้า">
     </div>
 
+    <div class="field">
+      <span class="label" id="theme-label">สไตล์ป้าย</span>
+      <div class="themes" id="themes" role="radiogroup" aria-labelledby="theme-label"></div>
+    </div>
+
+    <div class="field">
+      <span class="label">ภาพพื้นหลังของคุณเอง — เว้นว่างได้</span>
+      <div class="file-row">
+        <label class="btn btn-ghost file-btn">
+          <input type="file" id="bgfile" accept="image/png,image/jpeg,image/webp,image/gif">
+          <span id="bgfile-text">เลือกรูปจากเครื่อง</span>
+        </label>
+        <button type="button" class="btn btn-ghost" id="bgclear" hidden>ลบรูป</button>
+      </div>
+      <p class="hint">รูปหมา แมว ร้าน หรืออะไรก็ได้ ระบบวางเป็นพื้นหลัง ไม่ทับ QR แน่นอน รูปอยู่ในเครื่องคุณ ไม่ถูกอัปโหลดไปไหน</p>
+      <p class="err" id="bgfile-err"></p>
+    </div>
+
+    <div class="field" id="alpha-field" hidden>
+      <label for="bgalpha">ความจางของรูปพื้นหลัง — <b id="bgalpha-val">25%</b></label>
+      <input type="range" id="bgalpha" min="5" max="85" step="5" value="25">
+      <p class="hint">ยิ่งจาง ตัวหนังสือยิ่งอ่านง่าย</p>
+    </div>
+
     <p class="fine">เครื่องมือนี้สร้าง QR ตามมาตรฐาน EMVCo / Thai QR Payment ตัวเลขที่กรอกจะไม่ถูกบันทึกหรือส่งออกจากเครื่องคุณ</p>
   </div>
 
@@ -199,8 +241,10 @@ footer a{color:var(--accent-ink)}
   <p>ร้านที่ไม่ได้ผูกพร้อมเพย์ หรืออยากให้เงินเข้าบัญชีนิติบุคคลโดยตรง ปกติต้องเขียนป้าย “ธนาคาร X เลขที่ Y” ให้ลูกค้ายืนพิมพ์เอง ซึ่งช้าและพิมพ์ผิดง่าย มาตรฐาน Thai QR Payment มีช่องเก็บ “รหัสธนาคาร + เลขบัญชี” อยู่แล้ว (Tag 29 ช่องย่อย 04) เครื่องมือนี้ประกอบช่องนั้นให้</p>
   <h2>ถ้าสแกนแล้วแอปไม่รับ ทำยังไง</h2>
   <p>แปลว่าแอปธนาคารนั้นยังไม่รองรับช่อง 04 ไม่ใช่ QR ผิด ให้เปลี่ยนไปสร้างแบบพร้อมเพย์ด้วยเบอร์โทรหรือเลขบัตรประชาชนแทน ซึ่งแอปธนาคารไทยทุกแห่งรองรับ เงินเข้าบัญชีเดียวกันกับที่ผูกพร้อมเพย์ไว้</p>
+  <h2>ป้ายแต่งได้แค่ไหน</h2>
+  <p>มีสไตล์ป้ายให้เลือก 6 แบบ ตั้งแต่กระดาษเรียบ ๆ ไปจนถึงลายเจดีย์ล้านนา ท้องฟ้าจักรวาล รอยอุ้งเท้าสัตว์เลี้ยง ใบไม้ และแบบสีสดใส และอัปโหลดรูปของคุณเองมาเป็นพื้นหลังได้ เช่นรูปหมาแมวที่ร้าน รูปหน้าร้าน หรือรูปสินค้า ปรับความจางของรูปได้เพื่อให้ตัวหนังสือยังอ่านออก ตัว QR อยู่บนกรอบขาวทึบเสมอ รูปพื้นหลังจึงไม่มีทางไปทับจนสแกนไม่ติด</p>
   <h2>ปลอดภัยไหม</h2>
-  <p>QR นี้เก็บแค่ข้อมูล “รับเงิน” คนที่สแกนทำได้อย่างเดียวคือโอนเข้าบัญชีคุณ ดูดเงินออกไม่ได้ และหน้านี้ทำงานในเบราว์เซอร์ของคุณทั้งหมด ไม่มีการส่งหรือเก็บข้อมูล</p>
+  <p>QR นี้เก็บแค่ข้อมูล “รับเงิน” คนที่สแกนทำได้อย่างเดียวคือโอนเข้าบัญชีคุณ ดูดเงินออกไม่ได้ และหน้านี้ทำงานในเบราว์เซอร์ของคุณทั้งหมด ไม่มีการส่งหรือเก็บข้อมูล รวมถึงรูปที่คุณอัปโหลดด้วย รูปถูกอ่านในเครื่องคุณเท่านั้น ไม่ได้ถูกส่งขึ้นเซิร์ฟเวอร์ใด ๆ</p>
   <h2>เครื่องมือฟรีตัวอื่นของเรา</h2>
   <p><a href="/tools/promptpay">สร้าง QR พร้อมเพย์</a> · <a href="/tools/quotation">ใบเสนอราคา / ใบแจ้งหนี้ / ใบเสร็จ</a> · <a href="/tools/withholding-tax">คำนวณหัก ณ ที่จ่าย</a> · <a href="/tools/vat">คำนวณ VAT 7%</a> · <a href="/tools/cost-per-unit">คำนวณต้นทุนต่อแก้ว / ต่อจาน</a></p>
 </div>
@@ -301,7 +345,129 @@ function buildPayload(type, target, bankCode){
 /* ---- ป้าย A4 บน canvas (1240×1754 = A4 ที่ 150 dpi) ---- */
 const PAGE_W = 1240, PAGE_H = 1754, MARGIN = 96;
 const FONT = '"Sarabun","Leelawadee UI","Noto Sans Thai",sans-serif';
-const INK = '#2b2018', ACCENT = '#8a4a24', MUTED = '#7c6b59', LINE = '#e5dac7';
+
+/* สุ่มแบบมี seed — ลายดาว ลายอุ้งเท้า ฯลฯ จะอยู่ที่เดิมทุกครั้งที่วาดใหม่
+   ไม่งั้นลายจะกระโดดทุกครั้งที่ผู้ใช้พิมพ์ตัวอักษรเพิ่ม */
+function seeded(seed){
+  return () => (seed = (seed * 1664525 + 1013904223) & 0x7fffffff) / 0x7fffffff;
+}
+
+/* ---- ลายกราฟิกของแต่ละสไตล์ วาดด้วย canvas ล้วน ไม่มีไฟล์ภาพ ---- */
+function decoStars(ctx, t){
+  const rand = seeded(20260903);
+  for (let i = 0; i < 150; i++){
+    const x = rand() * PAGE_W, y = rand() * PAGE_H, r = rand() * 2.6 + 0.7;
+    ctx.globalAlpha = 0.25 + rand() * 0.6;
+    ctx.fillStyle = rand() > 0.85 ? t.accent : '#fff';
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+  }
+  /* ดาวประกายสี่แฉกไม่กี่ดวงให้ดูมีมิติ */
+  ctx.globalAlpha = 0.9;
+  ctx.strokeStyle = t.accent;
+  ctx.lineWidth = 3;
+  [[150, 300, 26], [1080, 250, 20], [190, 1520, 22], [1060, 1560, 17], [620, 120, 15]].forEach(([x, y, s]) => {
+    ctx.beginPath();
+    ctx.moveTo(x - s, y); ctx.lineTo(x + s, y);
+    ctx.moveTo(x, y - s); ctx.lineTo(x, y + s);
+    ctx.stroke();
+  });
+  ctx.globalAlpha = 1;
+}
+
+function decoTemple(ctx, t){
+  /* เงาเจดีย์ล้านนาที่ขอบล่าง — ฐานซ้อนชั้นแล้วเรียวขึ้นเป็นปลี */
+  ctx.globalAlpha = 0.13;
+  ctx.fillStyle = t.accent;
+  const base = PAGE_H - 40;
+  [[300, 1], [940, 0.78], [620, 1.25]].forEach(([cx, k]) => {
+    let w = 150 * k, h = 34 * k, y = base;
+    for (let i = 0; i < 5; i++){
+      ctx.fillRect(cx - w / 2, y - h, w, h);
+      y -= h + 6 * k;
+      w *= 0.78;
+    }
+    ctx.beginPath();
+    ctx.moveTo(cx, y - 150 * k);
+    ctx.lineTo(cx + w / 2, y);
+    ctx.lineTo(cx - w / 2, y);
+    ctx.closePath();
+    ctx.fill();
+  });
+  /* ลายฉลุมุมบนสองข้าง */
+  ctx.globalAlpha = 0.1;
+  [[0, 0, 1], [PAGE_W, 0, -1]].forEach(([x, y, dir]) => {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + dir * 320, y);
+    ctx.quadraticCurveTo(x + dir * 130, y + 130, x, y + 320);
+    ctx.closePath();
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+}
+
+function decoPaws(ctx, t){
+  /* รอยอุ้งเท้า = วงรีฝ่าเท้า + นิ้วสี่วง */
+  const rand = seeded(777001);
+  ctx.fillStyle = t.accent;
+  for (let i = 0; i < 26; i++){
+    const x = rand() * PAGE_W, y = rand() * PAGE_H, s = 0.5 + rand() * 0.7, a = rand() * 6.3;
+    ctx.save();
+    ctx.translate(x, y); ctx.rotate(a); ctx.scale(s, s);
+    ctx.globalAlpha = 0.1 + rand() * 0.1;
+    ctx.beginPath(); ctx.ellipse(0, 8, 22, 18, 0, 0, 7); ctx.fill();
+    [[-20, -16], [-7, -26], [8, -26], [21, -16]].forEach(([px, py]) => {
+      ctx.beginPath(); ctx.ellipse(px, py, 8, 10, 0, 0, 7); ctx.fill();
+    });
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function decoLeaves(ctx, t){
+  /* ใบไม้ = สองส่วนโค้งประกบกัน */
+  const rand = seeded(31415926);
+  ctx.fillStyle = t.accent;
+  for (let i = 0; i < 34; i++){
+    const x = rand() * PAGE_W, y = rand() * PAGE_H, s = 0.6 + rand() * 0.9, a = rand() * 6.3;
+    ctx.save();
+    ctx.translate(x, y); ctx.rotate(a); ctx.scale(s, s);
+    ctx.globalAlpha = 0.1 + rand() * 0.12;
+    ctx.beginPath();
+    ctx.moveTo(0, -30);
+    ctx.quadraticCurveTo(26, 0, 0, 30);
+    ctx.quadraticCurveTo(-26, 0, 0, -30);
+    ctx.fill();
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function decoConfetti(ctx, t){
+  const rand = seeded(90210);
+  const palette = [t.accent, '#ffffff', t.sub];
+  for (let i = 0; i < 60; i++){
+    const x = rand() * PAGE_W, y = rand() * PAGE_H, w = 12 + rand() * 26, h = 8 + rand() * 12;
+    ctx.save();
+    ctx.translate(x, y); ctx.rotate(rand() * 6.3);
+    ctx.globalAlpha = 0.14 + rand() * 0.18;
+    ctx.fillStyle = palette[i % palette.length];
+    ctx.fillRect(-w / 2, -h / 2, w, h);
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* bg  = พื้นป้าย, band = แถบหัว, ink = ตัวอักษรหลัก, sub = ตัวอักษรรอง,
+   accent = สีเน้น, line = เส้นคั่น, dark = ป้ายพื้นเข้มไหม (ใช้เลือกสีเงาตัวอักษร) */
+const THEMES = {
+  paper:   { name: 'กระดาษครีม',   bg: '#ffffff', band: '#8a4a24', ink: '#2b2018', sub: '#7c6b59', accent: '#8a4a24', line: '#e5dac7', dark: false, deco: null },
+  lanna:   { name: 'วัดล้านนา',     bg: '#fdf6e8', band: '#b08432', ink: '#3a2a15', sub: '#8a7351', accent: '#b08432', line: '#e8d9b8', dark: false, deco: decoTemple },
+  night:   { name: 'จักรวาล',       bg: '#101a33', band: '#f2c14e', ink: '#f8f4e9', sub: '#a8b6d6', accent: '#f2c14e', line: '#31406a', dark: true,  deco: decoStars },
+  pet:     { name: 'สัตว์เลี้ยง',    bg: '#fff5ee', band: '#e07a5f', ink: '#3d2b23', sub: '#8d7263', accent: '#e07a5f', line: '#f2d9cb', dark: false, deco: decoPaws },
+  garden:  { name: 'สวนเขียว',      bg: '#f1f7f0', band: '#3f7d55', ink: '#1f2e1f', sub: '#6b8570', accent: '#3f7d55', line: '#cfe2d2', dark: false, deco: decoLeaves },
+  party:   { name: 'สดใส',          bg: '#1b2f6b', band: '#ff9f1c', ink: '#ffffff', sub: '#bcd0ff', accent: '#ff9f1c', line: '#3a539b', dark: true,  deco: decoConfetti }
+};
 
 function setFont(ctx, weight, size){ ctx.font = weight + ' ' + size + 'px ' + FONT; }
 
@@ -338,61 +504,121 @@ function drawQrModules(ctx, qr, x, y, size){
   }
 }
 
+/* วาดรูปผู้ใช้เต็มหน้าแบบ cover — ครอบเต็มไม่บิดสัดส่วน ส่วนเกินถูกตัด */
+function drawCover(ctx, img){
+  const scale = Math.max(PAGE_W / img.width, PAGE_H / img.height);
+  const w = img.width * scale, h = img.height * scale;
+  ctx.drawImage(img, (PAGE_W - w) / 2, (PAGE_H - h) / 2, w, h);
+}
+
+/* กล่องมุมมนสำหรับรองพื้นหลัง QR */
+function roundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
 function drawPoster(ctx, qr, info){
-  ctx.fillStyle = '#fff';
+  const t = THEMES[info.theme] || THEMES.paper;
+
+  ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, PAGE_W, PAGE_H);
 
+  /* รูปที่ผู้ใช้อัปโหลด วางเป็นพื้นหลังใต้ทุกอย่าง */
+  if (info.bgImage){
+    ctx.save();
+    ctx.globalAlpha = info.bgAlpha;
+    drawCover(ctx, info.bgImage);
+    ctx.restore();
+  }
+
+  if (t.deco) t.deco(ctx, t);
+
   /* แถบสีหัวป้าย */
-  ctx.fillStyle = ACCENT;
+  ctx.fillStyle = t.band;
   ctx.fillRect(0, 0, PAGE_W, 28);
 
+  /* มีรูปพื้นหลังแล้วตัวอักษรอาจจมไปกับรูป ใส่ขอบเรืองรอบตัวอักษรกันอ่านไม่ออก */
+  const halo = () => {
+    if (!info.bgImage) return;
+    ctx.shadowColor = t.dark ? 'rgba(0,0,0,.85)' : 'rgba(255,255,255,.95)';
+    ctx.shadowBlur = 14;
+  };
+  const clearHalo = () => { ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; };
+
+  halo();
   let y = 205;
-  centerText(ctx, 'สแกนจ่ายที่นี่', y, '800', 108, INK);
+  centerText(ctx, 'สแกนจ่ายที่นี่', y, '800', 108, t.ink);
 
   y += 74;
-  centerText(ctx, info.kindLabel, y, '600', 44, MUTED);
+  centerText(ctx, info.kindLabel, y, '600', 44, t.sub);
 
   if (info.shop){
     y += 76;
-    centerText(ctx, info.shop, y, '700', 58, ACCENT, PAGE_W - MARGIN * 2);
+    centerText(ctx, info.shop, y, '700', 58, t.accent, PAGE_W - MARGIN * 2);
   }
+  clearHalo();
 
-  /* กล่อง QR */
+  /* กล่อง QR — พื้นขาวทึบเสมอ ไม่ว่าธีมหรือรูปพื้นหลังจะเป็นแบบไหน
+     รูปที่อัปโหลดจึงไม่มีทางไปทับ QR จนสแกนไม่ติด */
   const qrSize = 700;
   const boxPad = 30;
   const boxSize = qrSize + boxPad * 2;
   const boxX = (PAGE_W - boxSize) / 2;
   const boxY = y + 60;
-  ctx.strokeStyle = LINE;
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,.25)';
+  ctx.shadowBlur = 26;
+  ctx.shadowOffsetY = 8;
+  ctx.fillStyle = '#fff';
+  roundRect(ctx, boxX, boxY, boxSize, boxSize, 18);
+  ctx.fill();
+  ctx.restore();
+  ctx.strokeStyle = t.line;
   ctx.lineWidth = 3;
-  ctx.strokeRect(boxX, boxY, boxSize, boxSize);
+  roundRect(ctx, boxX, boxY, boxSize, boxSize, 18);
+  ctx.stroke();
   drawQrModules(ctx, qr, boxX + boxPad, boxY + boxPad, qrSize);
 
+  halo();
   y = boxY + boxSize + 92;
-  centerText(ctx, info.line1, y, '700', 50, MUTED, PAGE_W - MARGIN * 2);
+  centerText(ctx, info.line1, y, '700', 50, t.sub, PAGE_W - MARGIN * 2);
 
   y += 84;
-  centerText(ctx, info.line2, y, '800', 78, INK, PAGE_W - MARGIN * 2);
+  centerText(ctx, info.line2, y, '800', 78, t.ink, PAGE_W - MARGIN * 2);
+  clearHalo();
 
   if (info.footnote){
     y += 76;
-    ctx.strokeStyle = LINE;
+    ctx.strokeStyle = t.line;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(MARGIN, y); ctx.lineTo(PAGE_W - MARGIN, y); ctx.stroke();
 
     y += 78;
-    centerText(ctx, info.footnote, y, '600', 44, MUTED, PAGE_W - MARGIN * 2);
+    halo();
+    centerText(ctx, info.footnote, y, '600', 44, t.sub, PAGE_W - MARGIN * 2);
+    clearHalo();
   }
 
+  halo();
   centerText(ctx, 'สร้างป้ายฟรีที่ lamphunaitech.aecaichang.com/tools/bank-qr',
-    PAGE_H - 62, '400', 28, MUTED, PAGE_W - MARGIN * 2);
+    PAGE_H - 62, '400', 28, t.sub, PAGE_W - MARGIN * 2);
+  clearHalo();
 }
 
 /* ---- UI ---- */
 const $ = id => document.getElementById(id);
 const typeEl = $('type'), bankEl = $('bank'), targetEl = $('target');
 let currentQrUrl = null;
+let currentTheme = 'paper';
+let bgImage = null;
+
+const MAX_BG_BYTES = 12 * 1024 * 1024;
 
 BANKS.forEach(([code, name, chip, color]) => {
   const o = document.createElement('option');
@@ -572,7 +798,10 @@ function groupAccount(n){
 function posterInfo(v){
   const base = {
     shop: $('shop').value.trim(),
-    footnote: $('footnote').value.trim()
+    footnote: $('footnote').value.trim(),
+    theme: currentTheme,
+    bgImage: bgImage,
+    bgAlpha: Number($('bgalpha').value) / 100
   };
   if (v.type === 'bank'){
     const bank = BANKS.find(b => b[0] === bankEl.value);
@@ -656,6 +885,77 @@ $('show-payload').addEventListener('click', () => $('payload').classList.toggle(
 typeEl.addEventListener('change', syncType);
 bankEl.addEventListener('change', render);
 ['target','shop','footnote'].forEach(id => $(id).addEventListener('input', render));
+
+/* ---- ปุ่มเลือกสไตล์ป้าย ---- */
+Object.entries(THEMES).forEach(([key, t]) => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'theme-btn';
+  b.setAttribute('role', 'radio');
+  b.setAttribute('aria-checked', String(key === currentTheme));
+  b.dataset.theme = key;
+  const sw = document.createElement('span');
+  sw.className = 'theme-swatch';
+  sw.style.background = t.bg;
+  const bar = document.createElement('i');
+  bar.style.background = t.band;
+  sw.appendChild(bar);
+  b.append(sw, document.createTextNode(t.name));
+  b.addEventListener('click', () => {
+    currentTheme = key;
+    [...$('themes').children].forEach(x => x.setAttribute('aria-checked', String(x.dataset.theme === key)));
+    render();
+  });
+  $('themes').appendChild(b);
+});
+
+/* ---- รูปพื้นหลังของผู้ใช้ อ่านในเครื่องด้วย FileReader ไม่ส่งขึ้นเซิร์ฟเวอร์ ---- */
+function clearBg(){
+  bgImage = null;
+  $('bgfile').value = '';
+  $('bgfile-text').textContent = 'เลือกรูปจากเครื่อง';
+  $('bgfile-err').textContent = '';
+  $('bgclear').hidden = true;
+  $('alpha-field').hidden = true;
+  render();
+}
+
+$('bgfile').addEventListener('change', e => {
+  const file = e.target.files && e.target.files[0];
+  $('bgfile-err').textContent = '';
+  if (!file) return;
+  if (!/^image\//.test(file.type)){
+    $('bgfile-err').textContent = 'ไฟล์นี้ไม่ใช่รูปภาพ';
+    $('bgfile').value = '';
+    return;
+  }
+  if (file.size > MAX_BG_BYTES){
+    $('bgfile-err').textContent = 'รูปใหญ่เกิน 12 MB ลองย่อรูปก่อน';
+    $('bgfile').value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onerror = () => { $('bgfile-err').textContent = 'อ่านไฟล์รูปไม่สำเร็จ ลองไฟล์อื่น'; };
+  reader.onload = () => {
+    const img = new Image();
+    img.onerror = () => { $('bgfile-err').textContent = 'เปิดรูปนี้ไม่ได้ ลองไฟล์อื่น'; };
+    img.onload = () => {
+      bgImage = img;
+      $('bgfile-text').textContent = 'เปลี่ยนรูป';
+      $('bgclear').hidden = false;
+      $('alpha-field').hidden = false;
+      render();
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+$('bgclear').addEventListener('click', clearBg);
+$('bgalpha').addEventListener('input', () => {
+  $('bgalpha-val').textContent = $('bgalpha').value + '%';
+  render();
+});
 
 document.querySelectorAll('select').forEach(enhanceSelect);
 syncType();
