@@ -69,9 +69,9 @@ h1{font-size:26px;margin:0 0 6px}
   border:1.5px solid var(--line-2);border-radius:9px;background:#fff;font-size:13px;text-align:left}
 .theme-btn:hover{border-color:var(--accent)}
 .theme-btn[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft);font-weight:700}
-.theme-swatch{flex:none;width:22px;height:26px;border-radius:4px;border:1px solid rgba(0,0,0,.15);
-  position:relative;overflow:hidden}
-.theme-swatch i{position:absolute;left:0;right:0;top:0;height:5px;display:block}
+.theme-swatch{flex:none;width:22px;height:26px;border-radius:4px;border:1.5px solid;
+  display:flex;align-items:center;justify-content:center}
+.theme-swatch i{width:9px;height:9px;border-radius:50%;display:block}
 
 .file-row{display:flex;gap:8px;flex-wrap:wrap}
 .file-row .btn{width:auto;max-width:none;margin:0}
@@ -539,10 +539,6 @@ function drawPoster(ctx, qr, info){
     t.deco(ctx, t);
   }
 
-  /* แถบสีหัวป้าย */
-  ctx.fillStyle = t.band;
-  ctx.fillRect(0, 0, PAGE_W, 28);
-
   /* มีรูปพื้นหลังแล้วตัวอักษรอาจจมไปกับรูป ใส่ขอบเรืองรอบตัวอักษรกันอ่านไม่ออก */
   const halo = () => {
     if (!info.bgImage) return;
@@ -552,7 +548,7 @@ function drawPoster(ctx, qr, info){
   const clearHalo = () => { ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; };
 
   halo();
-  let y = 205;
+  let y = 190;
   centerText(ctx, 'สแกนจ่ายที่นี่', y, '800', 108, t.ink);
 
   y += 74;
@@ -895,12 +891,14 @@ Object.entries(THEMES).forEach(([key, t]) => {
   b.setAttribute('role', 'radio');
   b.setAttribute('aria-checked', String(key === currentTheme));
   b.dataset.theme = key;
+  /* ตัวอย่างสี: พื้นป้ายจริงพร้อมจุดสีเน้นของธีม (ป้ายไม่มีแถบสีหัวแล้ว) */
   const sw = document.createElement('span');
   sw.className = 'theme-swatch';
   sw.style.background = t.bg;
-  const bar = document.createElement('i');
-  bar.style.background = t.band;
-  sw.appendChild(bar);
+  sw.style.borderColor = t.accent;
+  const dot = document.createElement('i');
+  dot.style.background = t.accent;
+  sw.appendChild(dot);
   b.append(sw, document.createTextNode(t.name));
   b.addEventListener('click', () => {
     currentTheme = key;
