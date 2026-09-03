@@ -34,9 +34,11 @@
 </script>
 <style>
 :root{
+  /* ป้ายเป็นกระดาษสีอ่อนเสมอ บังคับ light ไว้ ไม่งั้นเบราว์เซอร์ที่ตั้ง dark mode
+     จะวาดลิสต์ของ <select> เป็นพื้นดำ ตัดกับหน้าเว็บ */
+  color-scheme: light;
   --ink:#2b2018; --accent:#8a4a24; --accent-ink:#6b3717; --accent-soft:#f1e5d3;
   --muted:#7c6b59; --line:#e5dac7; --line-2:#cdbca2; --paper:#f3ebdd;
-  --warn-bg:#fdf3e3; --warn-line:#e0b878; --warn-ink:#7a4a10;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);
@@ -54,9 +56,6 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-off
 main{max-width:860px;margin:0 auto;padding:26px 16px 60px}
 h1{font-size:26px;margin:0 0 6px}
 .lede{color:var(--muted);margin:0 0 18px}
-.notice{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-ink);
-  border-radius:10px;padding:12px 14px;margin:0 0 20px;font-size:13.5px}
-.notice strong{color:var(--warn-ink)}
 .grid{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
 @media(max-width:720px){.grid{grid-template-columns:1fr}}
 .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
@@ -73,6 +72,8 @@ h1{font-size:26px;margin:0 0 6px}
 .qr-empty{width:252px;max-width:100%;aspect-ratio:1/1.414;margin:0 auto;
   display:flex;align-items:center;justify-content:center;
   color:var(--muted);font-size:13.5px;border:1.5px dashed var(--line-2);border-radius:8px;padding:16px}
+/* display:flex ข้างบนทับ [hidden] ของเบราว์เซอร์ ต้องสั่งซ่อนเอง ไม่งั้นกล่องนี้ค้างอยู่ใต้ป้าย */
+.qr-empty[hidden]{display:none}
 .acct-label{color:var(--muted);font-size:13px;margin:12px 0;word-break:break-word}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:8px;
   cursor:pointer;padding:10px 18px;font-weight:700;text-decoration:none;width:100%;margin-bottom:8px}
@@ -115,12 +116,6 @@ footer a{color:var(--accent-ink)}
 <h1>สร้าง QR โอนเงินเข้าบัญชีธนาคาร ฟรี</h1>
 <p class="lede">ลูกค้าสแกนแล้วแอปธนาคารเติมชื่อธนาคารและเลขบัญชีให้เอง ไม่ต้องพิมพ์เลขบัญชีตามป้ายอีกต่อไป — ทุกอย่างคำนวณในเครื่องคุณ ไม่มีข้อมูลถูกส่งไปที่ไหน</p>
 
-<div class="notice" id="notice">
-  <strong>อ่านก่อนใช้:</strong> QR แบบ “เลขบัญชีธนาคาร” เป็นช่องที่มีอยู่จริงในมาตรฐาน Thai QR Payment ของธนาคารแห่งประเทศไทย
-  แต่แอปธนาคารแต่ละแห่งรองรับไม่เท่ากัน บางแอปสแกนแล้วขึ้นหน้าโอนได้เลย บางแอปฟ้องว่า QR ไม่ถูกต้อง
-  <strong>ทดสอบสแกนด้วยแอปที่ลูกค้าส่วนใหญ่ใช้ก่อนพิมพ์ป้ายติดหน้าร้าน</strong>
-  ถ้าแอปไม่รับ ให้สลับไปใช้แบบพร้อมเพย์ (เบอร์โทร / เลขบัตรประชาชน) ซึ่งทุกแอปรองรับแน่นอน
-</div>
 
 <div class="grid">
   <div class="card">
@@ -468,7 +463,6 @@ function syncType(){
   $('target-label').textContent = LABELS[t].label;
   targetEl.placeholder = LABELS[t].ph;
   $('target-hint').textContent = LABELS[t].hint;
-  $('notice').hidden = t !== 'bank';
   render();
 }
 
