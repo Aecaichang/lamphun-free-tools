@@ -67,17 +67,20 @@ h1{font-size:26px;margin:0 0 6px}
 .field .hint{color:var(--muted);font-size:12.5px;margin-top:4px}
 .err{color:#a33a1e;font-size:13px;min-height:18px;margin:2px 0 0}
 .qr-card{text-align:center}
-.qr-box{background:#fff;display:inline-block;padding:10px;border-radius:8px}
-#qr img,#qr canvas{display:block;width:240px;height:240px;image-rendering:pixelated}
-.qr-empty{width:240px;height:240px;display:flex;align-items:center;justify-content:center;
+#poster{display:block;width:100%;max-width:252px;height:auto;margin:0 auto;
+  border:1px solid var(--line);border-radius:6px;background:#fff}
+#poster[hidden]{display:none}
+.qr-empty{width:252px;max-width:100%;aspect-ratio:1/1.414;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;
   color:var(--muted);font-size:13.5px;border:1.5px dashed var(--line-2);border-radius:8px;padding:16px}
-.amt-label{font-weight:800;font-size:18px;margin:10px 0 2px}
-.acct-label{color:var(--muted);font-size:13px;margin:0 0 12px;word-break:break-word}
-.btn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:8px;cursor:pointer;
-  padding:10px 18px;font-weight:700;text-decoration:none}
+.acct-label{color:var(--muted);font-size:13px;margin:12px 0;word-break:break-word}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;border-radius:8px;
+  cursor:pointer;padding:10px 18px;font-weight:700;text-decoration:none;width:100%;margin-bottom:8px}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-primary:hover{background:var(--accent-ink)}
-.btn-primary[disabled]{opacity:.45;cursor:not-allowed}
+.btn-ghost{background:#fff;color:var(--accent-ink);border:1px solid var(--line-2);font-weight:600}
+.btn-ghost:hover{background:var(--accent-soft)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
 .payload{margin-top:12px;font-size:11.5px;color:var(--muted);word-break:break-all;
   text-align:left;background:var(--accent-soft);border-radius:6px;padding:8px;display:none}
 .payload.on{display:block}
@@ -91,11 +94,22 @@ footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 16px;text-a
   color:var(--muted);font-size:13px}
 footer a{color:var(--accent-ink)}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "หน้าแรก", "item": "https://lamphunaitech.aecaichang.com/" },
+    { "@type": "ListItem", "position": 2, "name": "เครื่องมือฟรี", "item": "https://lamphunaitech.aecaichang.com/tools/" },
+    { "@type": "ListItem", "position": 3, "name": "สร้าง QR โอนเข้าบัญชีธนาคาร", "item": "https://lamphunaitech.aecaichang.com/tools/bank-qr" }
+  ]
+}
+</script>
 </head>
 <body>
 <div class="bar">
   <a class="brand" href="/">ลำพูน AI Tech</a>
-  <span class="crumb"><a href="/#tools">เครื่องมือฟรี</a> / QR โอนเข้าบัญชี</span>
+  <span class="crumb"><a href="/tools/">เครื่องมือฟรี</a> / QR โอนเข้าบัญชี</span>
 </div>
 <main>
 <h1>สร้าง QR โอนเงินเข้าบัญชีธนาคาร ฟรี</h1>
@@ -138,16 +152,26 @@ footer a{color:var(--accent-ink)}
       <p class="err" id="amount-err"></p>
     </div>
 
+    <div class="field">
+      <label for="shop">ชื่อร้าน / ชื่อบัญชี ที่จะขึ้นบนป้าย — เว้นว่างได้</label>
+      <input id="shop" autocomplete="off" maxlength="40" placeholder="เช่น ร้านกาแฟบ้านสวน">
+      <p class="hint">ชื่อนี้ขึ้นบนป้ายอย่างเดียว ไม่ได้ฝังลงใน QR</p>
+    </div>
+
+    <div class="field">
+      <label for="footnote">ข้อความท้ายป้าย — เว้นว่างได้</label>
+      <input id="footnote" autocomplete="off" maxlength="60" value="โอนแล้วกรุณาแจ้งพนักงานก่อนรับสินค้า">
+    </div>
+
     <p class="fine">เครื่องมือนี้สร้าง QR ตามมาตรฐาน EMVCo / Thai QR Payment ตัวเลขที่กรอกจะไม่ถูกบันทึกหรือส่งออกจากเครื่องคุณ</p>
   </div>
 
   <div class="card qr-card">
-    <div class="qr-box" id="qr-box">
-      <div id="qr"><div class="qr-empty">เลือกธนาคารและกรอกเลขบัญชีเพื่อสร้าง QR</div></div>
-    </div>
-    <p class="amt-label" id="amt-label">&nbsp;</p>
-    <p class="acct-label" id="acct-label">&nbsp;</p>
-    <button class="btn btn-primary" id="dl" disabled>ดาวน์โหลดรูป QR</button>
+    <canvas id="poster" width="1240" height="1754" hidden></canvas>
+    <div class="qr-empty" id="qr-empty">เลือกธนาคารและกรอกเลขบัญชีเพื่อสร้างป้าย</div>
+    <p class="acct-label" id="acct-label">ป้ายขนาด A4 พิมพ์ได้เลย</p>
+    <button class="btn btn-primary" id="dl-poster" disabled>ดาวน์โหลดป้าย A4 (พิมพ์ได้เลย)</button>
+    <button class="btn btn-ghost" id="dl-qr" disabled>ดาวน์โหลดเฉพาะรูป QR</button>
     <div><button class="toggle" id="show-payload" hidden>ดูข้อมูลดิบใน QR (สำหรับตรวจสอบ)</button></div>
     <div class="payload" id="payload"></div>
   </div>
@@ -256,10 +280,104 @@ function buildPayload(type, target, amount, bankCode){
   console.assert(phone.includes('5406100.00'), 'ช่อง 54 (ยอดเงิน) ผิด: ' + phone);
 })();
 
+/* ---- ป้าย A4 บน canvas (1240×1754 = A4 ที่ 150 dpi) ---- */
+const PAGE_W = 1240, PAGE_H = 1754, MARGIN = 96;
+const FONT = '"Sarabun","Leelawadee UI","Noto Sans Thai",sans-serif';
+const INK = '#2b2018', ACCENT = '#8a4a24', MUTED = '#7c6b59', LINE = '#e5dac7';
+
+function setFont(ctx, weight, size){ ctx.font = weight + ' ' + size + 'px ' + FONT; }
+
+/* ตัดข้อความให้พอดีความกว้าง กันชื่อร้านยาวล้นป้าย */
+function fitText(ctx, text, maxWidth, weight, size){
+  setFont(ctx, weight, size);
+  while (size > 20 && ctx.measureText(text).width > maxWidth){
+    size -= 2;
+    setFont(ctx, weight, size);
+  }
+  return size;
+}
+
+function centerText(ctx, text, y, weight, size, color, maxWidth){
+  const used = maxWidth ? fitText(ctx, text, maxWidth, weight, size) : (setFont(ctx, weight, size), size);
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.fillText(text, PAGE_W / 2, y);
+  return used;
+}
+
+/* วาด QR จาก module matrix โดยตรง — คมทุกขนาด ไม่ต้องขยายรูป */
+function drawQrModules(ctx, qr, x, y, size){
+  const n = qr.getModuleCount();
+  const cell = size / n;
+  ctx.fillStyle = '#000';
+  for (let r = 0; r < n; r++){
+    for (let c = 0; c < n; c++){
+      if (qr.isDark(r, c)){
+        /* เผื่อขอบ 1px กันเส้นขาวบางระหว่างช่องตอน canvas ปัดเศษ */
+        ctx.fillRect(x + c * cell, y + r * cell, Math.ceil(cell) + 0.5, Math.ceil(cell) + 0.5);
+      }
+    }
+  }
+}
+
+function drawPoster(ctx, qr, info){
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0, 0, PAGE_W, PAGE_H);
+
+  /* แถบสีหัวป้าย */
+  ctx.fillStyle = ACCENT;
+  ctx.fillRect(0, 0, PAGE_W, 28);
+
+  let y = 190;
+  centerText(ctx, 'สแกนจ่ายที่นี่', y, '800', 108, INK);
+
+  y += 74;
+  centerText(ctx, info.kindLabel, y, '600', 44, MUTED);
+
+  if (info.shop){
+    y += 76;
+    centerText(ctx, info.shop, y, '700', 58, ACCENT, PAGE_W - MARGIN * 2);
+  }
+
+  /* กล่อง QR */
+  const qrSize = 660;
+  const boxPad = 30;
+  const boxSize = qrSize + boxPad * 2;
+  const boxX = (PAGE_W - boxSize) / 2;
+  const boxY = y + 60;
+  ctx.strokeStyle = LINE;
+  ctx.lineWidth = 3;
+  ctx.strokeRect(boxX, boxY, boxSize, boxSize);
+  drawQrModules(ctx, qr, boxX + boxPad, boxY + boxPad, qrSize);
+
+  y = boxY + boxSize + 92;
+  centerText(ctx, info.line1, y, '700', 50, MUTED, PAGE_W - MARGIN * 2);
+
+  y += 84;
+  centerText(ctx, info.line2, y, '800', 78, INK, PAGE_W - MARGIN * 2);
+
+  y += 76;
+  ctx.strokeStyle = LINE;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(MARGIN, y); ctx.lineTo(PAGE_W - MARGIN, y); ctx.stroke();
+
+  y += 76;
+  centerText(ctx, info.amountLabel, y, '800', 58, ACCENT, PAGE_W - MARGIN * 2);
+
+  if (info.footnote){
+    y += 66;
+    centerText(ctx, info.footnote, y, '400', 38, MUTED, PAGE_W - MARGIN * 2);
+  }
+
+  centerText(ctx, 'สร้างป้ายฟรีที่ lamphunaitech.aecaichang.com/tools/bank-qr',
+    PAGE_H - 62, '400', 28, MUTED, PAGE_W - MARGIN * 2);
+}
+
 /* ---- UI ---- */
 const $ = id => document.getElementById(id);
 const typeEl = $('type'), bankEl = $('bank'), targetEl = $('target'), amountEl = $('amount');
-let currentDataUrl = null;
+let currentQrUrl = null;
 
 bankEl.innerHTML = BANKS.map(b => '<option value="' + b[0] + '">' + b[1] + '</option>').join('');
 
@@ -299,44 +417,70 @@ function validate(){
   return { ok: !!raw && !targetErr && !amountErr, type, target: raw, amount, amtGiven: !!amtRaw };
 }
 
-function describe(v){
+/* จัดกลุ่มเลขบัญชีเป็น 3-1-5-1 ให้อ่านง่ายเวลาลูกค้าพิมพ์เอง */
+function groupAccount(n){
+  return n.length === 10 ? n.replace(/^(\d{3})(\d)(\d{5})(\d)$/, '$1-$2-$3-$4') : n;
+}
+
+function posterInfo(v){
+  const amountLabel = v.amount
+    ? 'ยอดชำระ ' + v.amount.toLocaleString('th-TH', { minimumFractionDigits: 2 }) + ' บาท'
+    : 'กรอกยอดเงินเองตอนสแกน';
+  const base = {
+    shop: $('shop').value.trim(),
+    footnote: $('footnote').value.trim(),
+    amountLabel
+  };
   if (v.type === 'bank'){
-    const name = BANKS.find(b => b[0] === bankEl.value);
-    return (name ? name[1] : bankEl.value) + ' · ' + v.target;
+    const bank = BANKS.find(b => b[0] === bankEl.value);
+    return Object.assign(base, {
+      kindLabel: 'โอนเข้าบัญชีธนาคาร',
+      line1: bank ? bank[1] : 'รหัสธนาคาร ' + bankEl.value,
+      line2: groupAccount(v.target)
+    });
   }
-  if (v.type === 'phone')   return 'พร้อมเพย์เบอร์ ' + v.target;
-  if (v.type === 'id')      return 'พร้อมเพย์เลขบัตร ' + v.target;
-  return 'e-Wallet ' + v.target;
+  if (v.type === 'phone')
+    return Object.assign(base, { kindLabel: 'พร้อมเพย์', line1: 'พร้อมเพย์เบอร์โทรศัพท์', line2: v.target });
+  if (v.type === 'id')
+    return Object.assign(base, { kindLabel: 'พร้อมเพย์', line1: 'พร้อมเพย์เลขบัตรประชาชน / เลขผู้เสียภาษี', line2: v.target });
+  return Object.assign(base, { kindLabel: 'e-Wallet', line1: 'e-Wallet ID', line2: v.target });
 }
 
 function reset(msg){
-  $('qr').innerHTML = '<div class="qr-empty">' + msg + '</div>';
-  $('amt-label').innerHTML = '&nbsp;';
-  $('acct-label').innerHTML = '&nbsp;';
-  $('dl').disabled = true;
+  $('qr-empty').textContent = msg;
+  $('qr-empty').hidden = false;
+  $('poster').hidden = true;
+  $('acct-label').textContent = 'ป้ายขนาด A4 พิมพ์ได้เลย';
+  $('dl-poster').disabled = true;
+  $('dl-qr').disabled = true;
   $('show-payload').hidden = true;
   $('payload').classList.remove('on');
-  currentDataUrl = null;
+  currentQrUrl = null;
 }
 
 function render(){
   const v = validate();
   if (!v.ok || (v.amtGiven && v.amount === null)){
-    reset(v.type === 'bank' ? 'เลือกธนาคารและกรอกเลขบัญชีเพื่อสร้าง QR' : 'กรอกข้อมูลเพื่อสร้าง QR');
+    reset(v.type === 'bank' ? 'เลือกธนาคารและกรอกเลขบัญชีเพื่อสร้างป้าย' : 'กรอกข้อมูลเพื่อสร้างป้าย');
     return;
   }
   const payload = buildPayload(v.type, v.target, v.amount, bankEl.value);
   const qr = qrcode(0, 'M');
   qr.addData(payload);
   qr.make();
-  $('qr').innerHTML = qr.createImgTag(6, 8);
-  currentDataUrl = $('qr').querySelector('img').src;
-  $('amt-label').textContent = v.amount
-    ? v.amount.toLocaleString('th-TH', { minimumFractionDigits: 2 }) + ' บาท'
-    : 'ไม่ระบุยอด (คนจ่ายกรอกเอง)';
-  $('acct-label').textContent = describe(v);
+
+  const info = posterInfo(v);
+  drawPoster($('poster').getContext('2d'), qr, info);
+  $('poster').hidden = false;
+  $('qr-empty').hidden = true;
+
+  /* รูป QR ล้วนไว้ให้ดาวน์โหลดแยก เผื่อเอาไปวางในงานออกแบบของตัวเอง */
+  currentQrUrl = qr.createDataURL(8, 16);
+
+  $('acct-label').textContent = info.line1 + ' · ' + info.line2;
   $('payload').textContent = payload;
-  $('dl').disabled = false;
+  $('dl-poster').disabled = false;
+  $('dl-qr').disabled = false;
   $('show-payload').hidden = false;
 }
 
@@ -350,19 +494,29 @@ function syncType(){
   render();
 }
 
-$('dl').addEventListener('click', () => {
-  if (!currentDataUrl) return;
+function download(href, name){
   const a = document.createElement('a');
-  a.href = currentDataUrl;
-  a.download = 'bank-transfer-qr.gif';
+  a.href = href;
+  a.download = name;
   a.click();
+}
+
+$('dl-poster').addEventListener('click', () => {
+  if ($('poster').hidden) return;
+  download($('poster').toDataURL('image/png'), 'ป้ายสแกนจ่าย-a4.png');
+});
+$('dl-qr').addEventListener('click', () => {
+  if (!currentQrUrl) return;
+  download(currentQrUrl, 'qr-สแกนจ่าย.gif');
 });
 $('show-payload').addEventListener('click', () => $('payload').classList.toggle('on'));
 typeEl.addEventListener('change', syncType);
 bankEl.addEventListener('change', render);
-targetEl.addEventListener('input', render);
-amountEl.addEventListener('input', render);
+['target','amount','shop','footnote'].forEach(id => $(id).addEventListener('input', render));
 syncType();
+
+/* ฟอนต์ Sarabun มาจาก CDN — canvas วาดรอบแรกอาจได้ฟอนต์สำรอง วาดซ้ำเมื่อฟอนต์พร้อม */
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
 </script>
 </body>
 </html>
