@@ -60,9 +60,28 @@ h1{font-size:26px;margin:0 0 6px}
 .grid{display:grid;grid-template-columns:1fr;gap:20px}
 .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}
 .field{margin-bottom:16px}
-.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
-.field input,.field select{width:100%;border:1px solid var(--line-2);border-radius:8px;
+.field label,.field .label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field input{width:100%;border:1px solid var(--line-2);border-radius:8px;
   padding:10px 12px;background:#fff}
+
+/* dropdown ทำเอง — <select> ของเบราว์เซอร์เปิดลิสต์ด้วย native menu ของ OS
+   ซึ่งไม่ฟัง color-scheme บนบางเบราว์เซอร์ พื้นเลยกลายเป็นสีดำตัดกับหน้าเว็บ */
+.picker{position:relative}
+.picker>select{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.picker-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+  text-align:left;font-weight:400;background:#fff;border:1px solid var(--line-2);border-radius:8px;
+  padding:10px 12px;cursor:pointer}
+.picker-btn:hover{border-color:var(--accent)}
+.picker-btn[aria-expanded="true"]{border-color:var(--accent);box-shadow:0 0 0 3px rgba(138,74,36,.13)}
+.picker-btn .chev{flex:none;width:9px;height:9px;margin-right:2px;border-right:2px solid var(--muted);
+  border-bottom:2px solid var(--muted);transform:translateY(-2px) rotate(45deg)}
+.picker-list{position:absolute;z-index:20;top:calc(100% + 6px);left:0;right:0;max-height:300px;
+  overflow:auto;margin:0;padding:6px;list-style:none;background:#fff;
+  border:1px solid var(--line-2);border-radius:10px;box-shadow:0 14px 34px rgba(58,38,20,.2)}
+.picker-list[hidden]{display:none}
+.picker-list li{padding:9px 12px;border-radius:6px;cursor:pointer}
+.picker-list li[aria-selected="true"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:700}
+.picker-list li.active{background:var(--accent);color:#fff}
 .field .hint{color:var(--muted);font-size:12.5px;margin-top:4px}
 .err{color:#a33a1e;font-size:13px;min-height:18px;margin:2px 0 0}
 .qr-card{text-align:center}
@@ -123,18 +142,22 @@ footer a{color:var(--accent-ink)}
 <div class="grid">
   <div class="card">
     <div class="field">
-      <label for="type">รับเงินด้วย</label>
-      <select id="type">
-        <option value="bank">เลขบัญชีธนาคาร</option>
-        <option value="phone">พร้อมเพย์ — เบอร์โทรศัพท์</option>
-        <option value="id">พร้อมเพย์ — เลขบัตรประชาชน / เลขผู้เสียภาษี</option>
-        <option value="ewallet">e-Wallet ID (15 หลัก)</option>
-      </select>
+      <span class="label" id="type-label">รับเงินด้วย</span>
+      <div class="picker">
+        <select id="type">
+          <option value="bank">เลขบัญชีธนาคาร</option>
+          <option value="phone">พร้อมเพย์ — เบอร์โทรศัพท์</option>
+          <option value="id">พร้อมเพย์ — เลขบัตรประชาชน / เลขผู้เสียภาษี</option>
+          <option value="ewallet">e-Wallet ID (15 หลัก)</option>
+        </select>
+      </div>
     </div>
 
     <div class="field" id="bank-field">
-      <label for="bank">ธนาคาร</label>
-      <select id="bank"></select>
+      <span class="label" id="bank-label">ธนาคาร</span>
+      <div class="picker">
+        <select id="bank"></select>
+      </div>
     </div>
 
     <div class="field">
@@ -370,6 +393,105 @@ let currentQrUrl = null;
 
 bankEl.innerHTML = BANKS.map(b => '<option value="' + b[0] + '">' + b[1] + '</option>').join('');
 
+/* สร้าง dropdown ที่สไตล์ได้ ครอบ <select> เดิมไว้ ค่ายังอ่านจาก select.value เหมือนเดิม */
+function enhanceSelect(select, labelId){
+  const wrap = select.parentElement;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'picker-btn';
+  btn.setAttribute('aria-haspopup', 'listbox');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-labelledby', labelId + ' ' + select.id + '-text');
+  const text = document.createElement('span');
+  text.id = select.id + '-text';
+  const chev = document.createElement('span');
+  chev.className = 'chev';
+  btn.append(text, chev);
+
+  const list = document.createElement('ul');
+  list.className = 'picker-list';
+  list.setAttribute('role', 'listbox');
+  list.hidden = true;
+  wrap.append(btn, list);
+
+  let items = [];
+  let active = -1;
+
+  function build(){
+    list.textContent = '';
+    items = [...select.options].map(o => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.dataset.value = o.value;
+      li.textContent = o.textContent;
+      list.appendChild(li);
+      return li;
+    });
+    syncLabel();
+  }
+
+  function syncLabel(){
+    text.textContent = select.selectedOptions[0] ? select.selectedOptions[0].textContent : '';
+    items.forEach(li => li.setAttribute('aria-selected', String(li.dataset.value === select.value)));
+  }
+
+  function setActive(i){
+    if (items[active]) items[active].classList.remove('active');
+    active = Math.max(0, Math.min(items.length - 1, i));
+    items[active].classList.add('active');
+    items[active].scrollIntoView({ block: 'nearest' });
+  }
+
+  function open(){
+    if (!list.hidden) return;
+    list.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    setActive(select.selectedIndex);
+  }
+
+  function close(){
+    if (list.hidden) return;
+    list.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    if (items[active]) items[active].classList.remove('active');
+    active = -1;
+  }
+
+  function choose(i){
+    select.selectedIndex = i;
+    select.dispatchEvent(new Event('change'));
+    syncLabel();
+    close();
+    btn.focus();
+  }
+
+  btn.addEventListener('click', () => (list.hidden ? open() : close()));
+  list.addEventListener('click', e => {
+    const li = e.target.closest('li');
+    if (li) choose(items.indexOf(li));
+  });
+  list.addEventListener('mousemove', e => {
+    const li = e.target.closest('li');
+    if (li) setActive(items.indexOf(li));
+  });
+  btn.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      if (list.hidden) open();
+      else setActive(active + (e.key === 'ArrowDown' ? 1 : -1));
+    } else if (e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      if (list.hidden) open(); else choose(active);
+    } else if (e.key === 'Escape'){
+      close();
+    }
+  });
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) close(); });
+
+  build();
+  return { refresh: build };
+}
+
 const LABELS = {
   bank:    { label: 'เลขที่บัญชี', ph: 'เช่น 1234567890',   hint: 'กรอกเฉพาะตัวเลข ไม่ต้องใส่ขีด' },
   phone:   { label: 'เบอร์โทรศัพท์', ph: '08x-xxx-xxxx',     hint: 'เบอร์ที่ผูกพร้อมเพย์ไว้' },
@@ -489,6 +611,9 @@ $('show-payload').addEventListener('click', () => $('payload').classList.toggle(
 typeEl.addEventListener('change', syncType);
 bankEl.addEventListener('change', render);
 ['target','shop','footnote'].forEach(id => $(id).addEventListener('input', render));
+
+enhanceSelect(typeEl, 'type-label');
+enhanceSelect(bankEl, 'bank-label');
 syncType();
 
 /* ฟอนต์ Sarabun มาจาก CDN — canvas วาดรอบแรกอาจได้ฟอนต์สำรอง วาดซ้ำเมื่อฟอนต์พร้อม */
