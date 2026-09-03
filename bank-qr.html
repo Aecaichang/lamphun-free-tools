@@ -197,7 +197,7 @@ footer a{color:var(--accent-ink)}
       <input id="footnote" autocomplete="off" maxlength="60" value="โอนแล้วกรุณาแจ้งพนักงานก่อนรับสินค้า">
     </div>
 
-    <div class="field">
+    <div class="field" id="theme-field">
       <span class="label" id="theme-label">สไตล์ป้าย</span>
       <div class="themes" id="themes" role="radiogroup" aria-labelledby="theme-label"></div>
     </div>
@@ -523,20 +523,21 @@ function roundRect(ctx, x, y, w, h, r){
 }
 
 function drawPoster(ctx, qr, info){
-  const t = THEMES[info.theme] || THEMES.paper;
+  /* ใช้รูปของผู้ใช้เป็นพื้นหลังเมื่อไหร่ ก็ไม่ต้องมีลายของธีมมากวนรูปอีก
+     กลับไปใช้ชุดสีเรียบแทน แล้วปล่อยให้รูปเป็นพระเอกของป้าย */
+  const t = info.bgImage ? THEMES.paper : (THEMES[info.theme] || THEMES.paper);
 
   ctx.fillStyle = t.bg;
   ctx.fillRect(0, 0, PAGE_W, PAGE_H);
 
-  /* รูปที่ผู้ใช้อัปโหลด วางเป็นพื้นหลังใต้ทุกอย่าง */
   if (info.bgImage){
     ctx.save();
     ctx.globalAlpha = info.bgAlpha;
     drawCover(ctx, info.bgImage);
     ctx.restore();
+  } else if (t.deco){
+    t.deco(ctx, t);
   }
-
-  if (t.deco) t.deco(ctx, t);
 
   /* แถบสีหัวป้าย */
   ctx.fillStyle = t.band;
@@ -917,6 +918,7 @@ function clearBg(){
   $('bgfile-err').textContent = '';
   $('bgclear').hidden = true;
   $('alpha-field').hidden = true;
+  $('theme-field').hidden = false;
   render();
 }
 
@@ -944,6 +946,8 @@ $('bgfile').addEventListener('change', e => {
       $('bgfile-text').textContent = 'เปลี่ยนรูป';
       $('bgclear').hidden = false;
       $('alpha-field').hidden = false;
+      /* รูปของผู้ใช้แทนที่ลายของธีมไปเลย ซ่อนตัวเลือกสไตล์ไว้ก่อน กดลบรูปแล้วค่อยกลับมา */
+      $('theme-field').hidden = true;
       render();
     };
     img.src = reader.result;
