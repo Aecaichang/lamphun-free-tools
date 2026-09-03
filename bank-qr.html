@@ -79,9 +79,14 @@ h1{font-size:26px;margin:0 0 6px}
   overflow:auto;margin:0;padding:6px;list-style:none;background:#fff;
   border:1px solid var(--line-2);border-radius:10px;box-shadow:0 14px 34px rgba(58,38,20,.2)}
 .picker-list[hidden]{display:none}
-.picker-list li{padding:9px 12px;border-radius:6px;cursor:pointer}
+.picker-list li{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;cursor:pointer}
 .picker-list li[aria-selected="true"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:700}
 .picker-list li.active{background:var(--accent);color:#fff}
+.picker-btn>span:first-child{display:flex;align-items:center;gap:10px;min-width:0}
+/* ชิปสีประจำธนาคาร ใช้แทนไฟล์โลโก้จริงซึ่งเป็นเครื่องหมายการค้า */
+.bank-chip{flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:26px;border-radius:5px;color:#fff;font-size:10px;font-weight:800;
+  letter-spacing:.2px;line-height:1;text-align:center}
 .field .hint{color:var(--muted);font-size:12.5px;margin-top:4px}
 .err{color:#a33a1e;font-size:13px;min-height:18px;margin:2px 0 0}
 .qr-card{text-align:center}
@@ -212,32 +217,34 @@ footer a{color:var(--accent-ink)}
 const PROMPTPAY_AID = 'A000000677010111';
 const BANK_ACCOUNT_WIRE_MAX = 43; /* 3 หลักรหัสธนาคาร + เลขบัญชี, ตามสเปค */
 
-/* รหัสธนาคาร 3 หลักตามระบบ SMART ของ ธปท. */
+/* รหัสธนาคาร 3 หลักตามระบบ SMART ของ ธปท. + ตัวย่อและสีประจำธนาคารสำหรับชิปในลิสต์
+   ใช้สีกับตัวย่อแทนไฟล์โลโก้จริง เพราะโลโก้ธนาคารเป็นเครื่องหมายการค้า เอามาแจกต่อ
+   ในโปรเจกต์ MIT ไม่ได้ — คนไทยจำธนาคารจากสีอยู่แล้ว */
 const BANKS = [
-  ['002', 'ธนาคารกรุงเทพ (BBL)'],
-  ['004', 'ธนาคารกสิกรไทย (KBANK)'],
-  ['006', 'ธนาคารกรุงไทย (KTB)'],
-  ['011', 'ธนาคารทหารไทยธนชาต (ttb)'],
-  ['014', 'ธนาคารไทยพาณิชย์ (SCB)'],
-  ['025', 'ธนาคารกรุงศรีอยุธยา (BAY)'],
-  ['030', 'ธนาคารออมสิน (GSB)'],
-  ['033', 'ธนาคารอาคารสงเคราะห์ (GHB)'],
-  ['034', 'ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร (ธ.ก.ส.)'],
-  ['022', 'ธนาคารซีไอเอ็มบี ไทย (CIMBT)'],
-  ['024', 'ธนาคารยูโอบี (UOB)'],
-  ['066', 'ธนาคารอิสลามแห่งประเทศไทย (IBANK)'],
-  ['067', 'ธนาคารทิสโก้ (TISCO)'],
-  ['069', 'ธนาคารเกียรตินาคินภัทร (KKP)'],
-  ['070', 'ธนาคารไอซีบีซี (ไทย) (ICBCT)'],
-  ['071', 'ธนาคารไทยเครดิต (TCRB)'],
-  ['073', 'ธนาคารแลนด์ แอนด์ เฮ้าส์ (LH Bank)'],
-  ['098', 'ธนาคารพัฒนาวิสาหกิจฯ (SME D Bank)'],
-  ['017', 'ซิตี้แบงก์ (Citibank)'],
-  ['020', 'สแตนดาร์ดชาร์เตอร์ด (ไทย)'],
-  ['031', 'เอชเอสบีซี (HSBC)'],
-  ['018', 'ซูมิโตโม มิตซุย (SMBC)'],
-  ['039', 'มิซูโฮ (Mizuho)'],
-  ['080', 'ซูมิโตโม มิตซุย ทรัสต์ (ไทย)']
+  ['002', 'ธนาคารกรุงเทพ (BBL)',                         'BBL',   '#1e4598'],
+  ['004', 'ธนาคารกสิกรไทย (KBANK)',                      'KBANK', '#138f2d'],
+  ['006', 'ธนาคารกรุงไทย (KTB)',                          'KTB',   '#1ba5e1'],
+  ['011', 'ธนาคารทหารไทยธนชาต (ttb)',                    'ttb',   '#1279be'],
+  ['014', 'ธนาคารไทยพาณิชย์ (SCB)',                       'SCB',   '#4e2e7f'],
+  ['025', 'ธนาคารกรุงศรีอยุธยา (BAY)',                     'BAY',   '#fec43b'],
+  ['030', 'ธนาคารออมสิน (GSB)',                           'GSB',   '#eb198d'],
+  ['033', 'ธนาคารอาคารสงเคราะห์ (GHB)',                    'ธอส.',  '#f57d23'],
+  ['034', 'ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร (ธ.ก.ส.)', 'ธกส.',  '#4b9b1d'],
+  ['022', 'ธนาคารซีไอเอ็มบี ไทย (CIMBT)',                  'CIMB',  '#7e2f36'],
+  ['024', 'ธนาคารยูโอบี (UOB)',                            'UOB',   '#0b3979'],
+  ['066', 'ธนาคารอิสลามแห่งประเทศไทย (IBANK)',             'IBANK', '#184615'],
+  ['067', 'ธนาคารทิสโก้ (TISCO)',                          'TISCO', '#12549f'],
+  ['069', 'ธนาคารเกียรตินาคินภัทร (KKP)',                  'KKP',   '#199cc5'],
+  ['070', 'ธนาคารไอซีบีซี (ไทย) (ICBCT)',                  'ICBC',  '#c50f1c'],
+  ['071', 'ธนาคารไทยเครดิต (TCRB)',                        'TCRB',  '#d4462d'],
+  ['073', 'ธนาคารแลนด์ แอนด์ เฮ้าส์ (LH Bank)',            'LH',    '#6d6e71'],
+  ['098', 'ธนาคารพัฒนาวิสาหกิจฯ (SME D Bank)',             'SME',   '#74256c'],
+  ['017', 'ซิตี้แบงก์ (Citibank)',                          'CITI',  '#1583c7'],
+  ['020', 'สแตนดาร์ดชาร์เตอร์ด (ไทย)',                     'SCBT',  '#0473ea'],
+  ['031', 'เอชเอสบีซี (HSBC)',                             'HSBC',  '#db0011'],
+  ['018', 'ซูมิโตโม มิตซุย (SMBC)',                        'SMBC',  '#009944'],
+  ['039', 'มิซูโฮ (Mizuho)',                               'MHCB',  '#1e3c96'],
+  ['080', 'ซูมิโตโม มิตซุย ทรัสต์ (ไทย)',                   'SMTB',  '#00a0e9']
 ];
 
 function tlv(id, value){
@@ -387,7 +394,21 @@ const $ = id => document.getElementById(id);
 const typeEl = $('type'), bankEl = $('bank'), targetEl = $('target');
 let currentQrUrl = null;
 
-bankEl.innerHTML = BANKS.map(b => '<option value="' + b[0] + '">' + b[1] + '</option>').join('');
+BANKS.forEach(([code, name, chip, color]) => {
+  const o = document.createElement('option');
+  o.value = code;
+  o.textContent = name;
+  o.dataset.chip = chip;
+  o.dataset.color = color;
+  bankEl.appendChild(o);
+});
+
+/* เลือกสีตัวอักษรบนชิปจากความสว่างของพื้นหลัง สีอ่อนอย่างเหลืองกรุงศรีต้องใช้ตัวอักษรเข้ม */
+function readableOn(hex){
+  const n = parseInt(hex.slice(1), 16);
+  const lum = 0.299 * (n >> 16 & 255) + 0.587 * (n >> 8 & 255) + 0.114 * (n & 255);
+  return lum > 150 ? '#2b2018' : '#fff';
+}
 
 /* สร้าง dropdown ที่สไตล์ได้ ครอบ <select> เดิมไว้ ค่ายังอ่านจาก select.value เหมือนเดิม
    ครอบ wrapper และย้าย label ให้เอง จึงไม่ต้องแก้ HTML ของหน้าที่เอาไปใช้ */
@@ -426,13 +447,28 @@ function enhanceSelect(select){
   let items = [];
   let active = -1;
 
+  /* option ที่มี data-chip จะได้ชิปสีนำหน้า (ใช้กับลิสต์ธนาคาร) ตัวที่ไม่มีก็แสดงข้อความล้วน */
+  function fill(el, option){
+    el.textContent = '';
+    if (option && option.dataset.chip){
+      const chip = document.createElement('span');
+      chip.className = 'bank-chip';
+      chip.style.background = option.dataset.color;
+      chip.style.color = readableOn(option.dataset.color);
+      chip.textContent = option.dataset.chip;
+      chip.setAttribute('aria-hidden', 'true');
+      el.appendChild(chip);
+    }
+    el.appendChild(document.createTextNode(option ? option.textContent : ''));
+  }
+
   function build(){
     list.textContent = '';
     items = [...select.options].map(o => {
       const li = document.createElement('li');
       li.setAttribute('role', 'option');
       li.dataset.value = o.value;
-      li.textContent = o.textContent;
+      fill(li, o);
       list.appendChild(li);
       return li;
     });
@@ -440,7 +476,7 @@ function enhanceSelect(select){
   }
 
   function syncLabel(){
-    text.textContent = select.selectedOptions[0] ? select.selectedOptions[0].textContent : '';
+    fill(text, select.selectedOptions[0]);
     items.forEach(li => li.setAttribute('aria-selected', String(li.dataset.value === select.value)));
   }
 
