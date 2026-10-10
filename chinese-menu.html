@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#8a4a24">
+<title>ทำเมนูภาษาจีนฟรี — เมนูไทย-จีนพร้อมพิมพ์ สำหรับร้านที่มีลูกค้าชาวจีน | ลำพูน AI Tech</title>
+<meta name="description" content="เลือกเมนูไทยที่ร้านขาย ใส่ราคา ได้เมนูสองภาษา ไทย-จีน (简体中文) พร้อมป้ายรับ Alipay / WeChat Pay สั่งพิมพ์ A4 ได้ทันที ฟรี ไม่ต้องสมัครสมาชิก">
+<link rel="canonical" href="https://lamphunaitech.aecaichang.com/tools/chinese-menu">
+<link rel="icon" href="../favicon-32.png" sizes="32x32">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://lamphunaitech.aecaichang.com/tools/chinese-menu">
+<meta property="og:site_name" content="ลำพูน AI Tech">
+<meta property="og:title" content="ทำเมนูภาษาจีนฟรี — ลูกค้าจีนชี้สั่งได้เอง ไม่ต้องใช้ท่าทาง">
+<meta property="og:description" content="เลือกเมนูไทย ใส่ราคา ได้เมนูไทย-จีนพร้อมพิมพ์ A4 ทันที">
+<meta property="og:image" content="https://lamphunaitech.aecaichang.com/assets/cover.jpg">
+<meta property="og:locale" content="th_TH">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ทำเมนูภาษาจีน",
+  "url": "https://lamphunaitech.aecaichang.com/tools/chinese-menu",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "THB" },
+  "provider": { "@type": "ProfessionalService", "name": "ลำพูน AI Tech", "url": "https://lamphunaitech.aecaichang.com/" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "หน้าแรก", "item": "https://lamphunaitech.aecaichang.com/" },
+    { "@type": "ListItem", "position": 2, "name": "เครื่องมือฟรี", "item": "https://lamphunaitech.aecaichang.com/tools/" },
+    { "@type": "ListItem", "position": 3, "name": "ทำเมนูภาษาจีน", "item": "https://lamphunaitech.aecaichang.com/tools/chinese-menu" }
+  ]
+}
+</script>
+<style>
+:root{
+  color-scheme: light;
+  --ink:#2b2018; --accent:#8a4a24; --accent-ink:#6b3717; --accent-soft:#f1e5d3;
+  --muted:#7c6b59; --line:#e5dac7; --line-2:#cdbca2; --paper:#f3ebdd; --bad:#a33a1e;
+  --zh:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Sarabun","TH Sarabun New","Leelawadee UI","Noto Sans Thai",sans-serif;
+  font-size:15px;line-height:1.65}
+input,button{font:inherit;color:inherit}
+input:focus{outline:2px solid var(--line-2);outline-offset:1px;border-radius:3px}
+button:focus-visible,a:focus-visible,label:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);
+  padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
+  box-shadow:0 2px 10px rgba(58,38,20,.07)}
+.bar .brand{font-weight:800;text-decoration:none;color:var(--ink)}
+.bar .crumb{color:var(--muted);font-size:13px}
+.bar .crumb a{color:var(--accent-ink)}
+.bar .print{margin-left:auto}
+main{max-width:760px;margin:0 auto;padding:26px 16px 60px}
+h1{font-size:26px;margin:0 0 6px}
+.lede{color:var(--muted);margin:0 0 22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:18px}
+.card h2{font-size:17px;margin:0 0 4px}
+.card .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:700;font-size:13.5px;margin-bottom:5px}
+.field input,.search{width:100%;border:1px solid var(--line-2);border-radius:8px;padding:10px 12px;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.btn{border:1px solid var(--line-2);background:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:700}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-link{border:0;background:none;color:var(--bad);cursor:pointer;font-size:13px;padding:0}
+
+/* รายการเมนูในพจนานุกรม: ติ๊กเลือก + ใส่ราคา */
+.cat{font-weight:800;font-size:14px;margin:16px 0 6px;color:var(--accent-ink)}
+.dish{display:grid;grid-template-columns:auto 1fr 96px;gap:10px;align-items:center;
+  padding:7px 4px;border-bottom:1px solid var(--line)}
+.dish .zh{font-family:var(--zh);color:var(--muted);font-size:13.5px;margin-left:6px}
+.dish input[type=text]{width:100%;border:1px solid var(--line-2);border-radius:6px;padding:6px 8px;text-align:right}
+.dish input[type=text]:disabled{background:#f6f1e8;color:#bbb}
+.dish[hidden]{display:none}
+.custom{display:grid;grid-template-columns:1.3fr 1.3fr 90px auto;gap:8px;margin-bottom:8px}
+.custom input{width:100%;border:1px solid var(--line-2);border-radius:6px;padding:7px 9px}
+.custom .c-zh{font-family:var(--zh)}
+.notes label{display:flex;gap:8px;align-items:center;padding:4px 0}
+.notes .zh{font-family:var(--zh);color:var(--muted);font-size:13.5px}
+.copied{color:var(--accent-ink);font-size:13px;margin-left:8px}
+@media (max-width:640px){ .two{grid-template-columns:1fr} .custom{grid-template-columns:1fr 1fr} }
+
+/* เมนูที่จะพิมพ์ */
+.sheet{background:#fff;border:1px solid var(--line);border-radius:12px;padding:34px 36px;margin-bottom:18px}
+.sheet .head{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:6px}
+.sheet .zh-shop{font-family:var(--zh);font-weight:700;font-size:30px;line-height:1.3}
+.sheet .th-shop{font-weight:700;font-size:18px;color:var(--muted)}
+.sheet .zh-title{font-family:var(--zh);font-size:15px;letter-spacing:.3em;margin-top:4px}
+.sheet h3{font-family:var(--zh);font-size:18px;margin:20px 0 4px;border-bottom:1px solid var(--line-2);padding-bottom:3px}
+.sheet h3 small{font-family:"Sarabun",sans-serif;font-weight:600;color:var(--muted);font-size:13px;margin-left:8px}
+.row{display:flex;align-items:baseline;gap:10px;padding:7px 0;border-bottom:1px dotted var(--line-2)}
+.row .names{flex:1}
+.row .zh{font-family:var(--zh);font-weight:700;font-size:18px;display:block;line-height:1.35}
+.row .th{color:var(--muted);font-size:13.5px}
+.row .price{font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sheet .foot{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px}
+.sheet .foot span{font-family:var(--zh);font-size:14px;border:1px solid var(--ink);border-radius:999px;padding:3px 12px}
+.sheet .empty{color:var(--muted);text-align:center;padding:30px 0}
+.sheet .empty[hidden]{display:none}
+
+.prose{margin-top:34px}
+.prose h2{font-size:19px;margin:26px 0 8px}
+.prose p,.prose li{color:#4a3c2e}
+.fine{color:var(--muted);font-size:12.5px}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 16px;text-align:center;
+  color:var(--muted);font-size:13px}
+footer a{color:var(--accent-ink)}
+
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .bar,h1,.lede,.card,.prose,footer{display:none}
+  main{max-width:none;padding:0}
+  .sheet{border:0;border-radius:0;padding:0;margin:0}
+  .row{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a class="brand" href="/">ลำพูน AI Tech</a>
+  <span class="crumb"><a href="/tools/">เครื่องมือฟรี</a> / เมนูภาษาจีน</span>
+  <button class="btn btn-primary print" type="button" id="print">พิมพ์เมนู / บันทึก PDF</button>
+</div>
+<main>
+<h1>ทำเมนูภาษาจีน</h1>
+<p class="lede">ติ๊กเมนูที่ร้านขาย ใส่ราคา ได้เมนูไทย-จีน (简体中文) พร้อมพิมพ์ทันที ลูกค้าชาวจีนชี้สั่งได้เอง ข้อมูลอยู่ในเครื่องคุณ ไม่ถูกส่งไปที่ไหน</p>
+
+<div class="card">
+  <h2>1. ชื่อร้าน</h2>
+  <div class="two">
+    <div class="field"><label for="shop-th">ชื่อร้าน (ไทย)</label><input id="shop-th" autocomplete="off" placeholder="เช่น ร้านข้าวซอยป้าแดง"></div>
+    <div class="field"><label for="shop-zh">ชื่อร้าน (จีน) ไม่ใส่ก็ได้</label><input id="shop-zh" autocomplete="off" placeholder="เช่น 红姨泰北咖喱面" style="font-family:var(--zh)"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>2. เลือกเมนูและใส่ราคา</h2>
+  <p class="hint">ชื่อจีนในรายการนี้เป็นชื่อที่ร้านอาหารไทยในจีนและแอปท่องเที่ยวจีนใช้กันทั่วไป ติ๊กแล้วใส่ราคาเป็นบาท</p>
+  <input class="search" id="search" type="search" autocomplete="off" placeholder="ค้นหาเมนู เช่น ข้าวซอย ชาไทย">
+  <div id="dishes"></div>
+</div>
+
+<div class="card">
+  <h2>3. เมนูที่ไม่มีในรายการ</h2>
+  <p class="hint">ใส่ชื่อไทยกับราคา แล้วกด “คัดลอกคำสั่งให้ AI แปล” ไปวางใน ChatGPT หรือ Gemini เอาชื่อจีนที่ได้มาใส่ช่องกลาง ถ้ามีคนรู้จักที่อ่านจีนเป็น ให้ช่วยดูอีกรอบก่อนพิมพ์</p>
+  <div id="customs"></div>
+  <button class="btn" type="button" id="add-custom">+ เพิ่มเมนู</button>
+  <button class="btn" type="button" id="copy-prompt">คัดลอกคำสั่งให้ AI แปล</button><span class="copied" id="copied"></span>
+</div>
+
+<div class="card notes">
+  <h2>4. ป้ายท้ายเมนู</h2>
+  <div id="notes"></div>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="head">
+    <div class="zh-shop" id="p-shop-zh"></div>
+    <div class="th-shop" id="p-shop-th"></div>
+    <div class="zh-title">菜单 · เมนู</div>
+  </div>
+  <div id="p-body"></div>
+  <p class="empty" id="p-empty">ติ๊กเมนูด้านบนก่อน เมนูจะขึ้นตรงนี้</p>
+  <div class="foot" id="p-notes"></div>
+</div>
+
+<div class="prose">
+  <h2>ทำไมต้องมีเมนูภาษาจีน</h2>
+  <p>ลูกค้าชาวจีนส่วนใหญ่อ่านภาษาอังกฤษไม่คล่อง ถ้าอ่านเมนูไม่ออกก็มักเดินผ่าน หรือสั่งแค่เมนูที่ชี้รูปได้ เมนูที่มีชื่อจีนช่วยให้เขาตัดสินใจเร็วและสั่งเพิ่มได้เอง ร้านก็ไม่ต้องอธิบายด้วยท่าทาง</p>
+  <h2>ข้อควรรู้</h2>
+  <ul>
+    <li>ป้าย “支持支付宝 / 微信支付” ติ๊กเฉพาะเมื่อร้านรับ Alipay หรือ WeChat Pay จริง เช่น ผ่านเครื่อง EDC หรือแอปธนาคารที่รองรับ</li>
+    <li>ชื่อจีนในรายการเป็นภาษาจีนตัวย่อ (简体) ที่คนจีนแผ่นดินใหญ่ใช้ นักท่องเที่ยวไต้หวันและฮ่องกงก็อ่านเข้าใจ</li>
+    <li>เมนูของร้านถูกจำไว้ในเบราว์เซอร์เครื่องนี้ เปิดครั้งหน้าแก้ราคาต่อได้เลย</li>
+  </ul>
+  <h2>เครื่องมือฟรีตัวอื่นของเรา</h2>
+  <p><a href="/tools/cost-per-unit">คำนวณต้นทุนต่อแก้ว / ต่อจาน</a> · <a href="/tools/promptpay">สร้าง QR พร้อมเพย์</a> · <a href="/tools/bank-qr">สร้าง QR โอนเข้าบัญชีธนาคาร</a> · <a href="/tools/quotation">ใบเสนอราคา / ใบเสร็จรับเงิน</a></p>
+</div>
+</main>
+<footer>
+  เครื่องมือฟรีโดย <a href="/">ลำพูน AI Tech</a> · <a href="https://www.facebook.com/profile.php?id=61592915202550" target="_blank" rel="noopener">Facebook Page</a> · <a href="https://github.com/Aecaichang/lamphun-free-tools" target="_blank" rel="noopener">โค้ดบน GitHub (MIT)</a>
+</footer>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const STORE = 'lamphun-chinese-menu-v1';
+
+/* หมวด: ชื่อจีนบนเมนู + ชื่อไทย */
+const CATS = { food: ['主食', 'อาหาร'], drink: ['饮品', 'เครื่องดื่ม'], dessert: ['甜点', 'ของหวาน'] };
+
+/* ponytail: พจนานุกรมเขียนมือ ไม่ได้เรียก API แปล — ชื่อที่ไม่มีให้ร้านเติมเองในข้อ 3 */
+const DISHES = [
+  ['food', 'ข้าวซอยไก่', '泰北咖喱鸡肉面'],
+  ['food', 'ข้าวซอยหมู', '泰北咖喱猪肉面'],
+  ['food', 'ขนมจีนน้ำเงี้ยว', '泰北番茄猪肉米线'],
+  ['food', 'แกงฮังเล', '泰北猪肉咖喱'],
+  ['food', 'ไส้อั่ว', '泰北香肠'],
+  ['food', 'น้ำพริกหนุ่ม', '泰北青辣椒酱'],
+  ['food', 'แคบหมู', '炸猪皮'],
+  ['food', 'ข้าวมันไก่', '海南鸡饭'],
+  ['food', 'ข้าวขาหมู', '猪脚饭'],
+  ['food', 'ข้าวผัดหมู', '猪肉炒饭'],
+  ['food', 'ข้าวผัดกุ้ง', '虾仁炒饭'],
+  ['food', 'ข้าวกะเพราหมูสับ', '打抛猪肉饭'],
+  ['food', 'ข้าวกะเพราไก่', '打抛鸡肉饭'],
+  ['food', 'ข้าวไข่เจียว', '泰式煎蛋饭'],
+  ['food', 'ผัดไทยกุ้ง', '鲜虾泰式炒河粉'],
+  ['food', 'ก๋วยเตี๋ยวหมู', '猪肉粿条汤'],
+  ['food', 'ก๋วยเตี๋ยวเรือ', '泰式船面'],
+  ['food', 'ต้มยำกุ้ง', '冬阴功汤'],
+  ['food', 'ต้มข่าไก่', '椰汁鸡汤'],
+  ['food', 'แกงเขียวหวานไก่', '绿咖喱鸡'],
+  ['food', 'ส้มตำ', '青木瓜沙拉'],
+  ['food', 'ลาบหมู', '泰式猪肉碎沙拉'],
+  ['food', 'ไก่ย่าง', '泰式烤鸡'],
+  ['food', 'หมูปิ้ง', '烤猪肉串'],
+  ['food', 'คอหมูย่าง', '烤猪颈肉'],
+  ['food', 'ปลาเผาเกลือ', '盐烤鱼'],
+  ['food', 'กุ้งเผา', '烤虾'],
+  ['food', 'ผัดผักบุ้งไฟแดง', '清炒空心菜'],
+  ['food', 'ไข่เจียว', '泰式煎蛋'],
+  ['food', 'ข้าวสวย', '白米饭'],
+  ['food', 'ข้าวเหนียว', '糯米饭'],
+  ['drink', 'ชาไทย', '泰式奶茶'],
+  ['drink', 'ชาเขียวนม', '绿奶茶'],
+  ['drink', 'ชามะนาว', '泰式柠檬茶'],
+  ['drink', 'กาแฟเย็น', '泰式冰咖啡'],
+  ['drink', 'อเมริกาโน่', '美式咖啡'],
+  ['drink', 'ลาเต้', '拿铁'],
+  ['drink', 'โกโก้', '可可'],
+  ['drink', 'น้ำลำไย', '龙眼汁'],
+  ['drink', 'น้ำมะพร้าว', '椰子水'],
+  ['drink', 'น้ำส้มคั้น', '鲜榨橙汁'],
+  ['drink', 'สมูทตี้มะม่วง', '芒果冰沙'],
+  ['drink', 'น้ำเปล่า', '矿泉水'],
+  ['drink', 'เบียร์', '啤酒'],
+  ['dessert', 'ข้าวเหนียวมะม่วง', '芒果糯米饭'],
+  ['dessert', 'โรตี', '泰式煎饼'],
+  ['dessert', 'บัวลอย', '椰奶汤圆'],
+  ['dessert', 'ไอศกรีมกะทิ', '椰子冰淇淋'],
+  ['dessert', 'ลำไยอบแห้ง', '龙眼干']
+].map(([cat, th, zh], i) => ({ id: 'd' + i, cat, th, zh }));
+
+const NOTES = [
+  ['alipay', 'รับ Alipay', '支持支付宝'],
+  ['wechat', 'รับ WeChat Pay', '支持微信支付'],
+  ['qr', 'สแกน QR จ่ายได้', '可扫码支付'],
+  ['card', 'รับบัตรเครดิต', '可刷卡'],
+  ['cash', 'รับเงินสดเท่านั้น', '仅收现金'],
+  ['spicy', 'เลือกความเผ็ดได้', '可选辣度：不辣 / 微辣 / 辣'],
+  ['sugar', 'สั่งหวานน้อยได้', '可选少糖'],
+  ['vat', 'ราคารวม VAT แล้ว', '价格已含税'],
+  ['wifi', 'มี Wi-Fi ฟรี', '免费 Wi-Fi']
+];
+
+/* ราคา: รับเฉพาะเลขบวก ตัดคอมมา — ว่างหรือผิดรูปแบบ = ไม่แสดงราคา */
+function parsePrice(v){
+  const s = String(v ?? '').trim().replace(/,/g, '');
+  if (!/^\d+(\.\d{1,2})?$/.test(s)) return null;
+  return Number(s);
+}
+const fmtPrice = n => '฿' + n.toLocaleString('th-TH', { maximumFractionDigits: 2 });
+
+/* รวมรายการที่จะพิมพ์ เรียงตามหมวด — custom ต้องมีทั้งชื่อไทยและจีนถึงจะขึ้นเมนู */
+function buildMenu(state){
+  const picked = DISHES.filter(d => state.picked[d.id]).map(d => ({ ...d, price: parsePrice(state.picked[d.id].price) }));
+  const customs = state.customs
+    .filter(c => c.th.trim() && c.zh.trim())
+    .map(c => ({ cat: 'food', th: c.th.trim(), zh: c.zh.trim(), price: parsePrice(c.price) }));
+  const all = [...picked, ...customs];
+  return Object.keys(CATS).map(cat => ({ cat, items: all.filter(i => i.cat === cat) })).filter(g => g.items.length);
+}
+
+function aiPrompt(customs){
+  const names = customs.map(c => c.th.trim()).filter(Boolean);
+  if (!names.length) return '';
+  return 'ช่วยแปลชื่อเมนูอาหารไทยต่อไปนี้เป็นภาษาจีนตัวย่อ (简体中文) แบบที่ใช้บนเมนูร้านอาหารไทยจริง ' +
+    'สั้น อ่านแล้วรู้ว่าเป็นอาหารอะไร ตอบเป็นรายการ "ชื่อไทย = ชื่อจีน" อย่างเดียว\n\n' + names.map(n => '- ' + n).join('\n');
+}
+
+(function selftest(){
+  console.assert(parsePrice('1,250') === 1250, 'คอมมาต้องถูกตัด');
+  console.assert(parsePrice('60.5') === 60.5, 'ทศนิยมต้องผ่าน');
+  console.assert(parsePrice('') === null && parsePrice('-5') === null && parsePrice('abc') === null, 'ค่าผิดต้องได้ null');
+  const m = buildMenu({ picked: { d0: { price: '60' }, d31: { price: '' } }, customs: [{ th: 'ข้าวต้ม', zh: '', price: '40' }] });
+  console.assert(m.length === 2 && m[0].cat === 'food' && m[1].cat === 'drink', 'ต้องแบ่งหมวดและเรียง food ก่อน drink', m);
+  console.assert(m[0].items.length === 1, 'custom ที่ไม่มีชื่อจีนต้องไม่ขึ้นเมนู', m);
+  console.assert(m[1].items[0].price === null, 'ราคาว่างต้องได้ null');
+  console.assert(aiPrompt([{ th: 'ข้าวต้ม' }, { th: ' ' }]).endsWith('- ข้าวต้ม'), 'prompt ต้องข้ามแถวว่าง');
+})();
+
+function load(){
+  try {
+    const s = JSON.parse(localStorage.getItem(STORE));
+    if (s && s.picked && Array.isArray(s.customs)) return { shopTh: '', shopZh: '', notes: {}, ...s };
+  } catch (e) { console.warn('อ่านเมนูที่บันทึกไว้ไม่ได้ เริ่มใหม่', e); }
+  return { shopTh: '', shopZh: '', picked: {}, customs: [{ th: '', zh: '', price: '' }], notes: { qr: true } };
+}
+let state = load();
+function save(){
+  try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { /* โหมดส่วนตัว: ใช้ได้แต่ไม่จำ */ }
+}
+
+const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
+
+function renderDishes(){
+  const box = $('dishes');
+  box.textContent = '';
+  for (const cat of Object.keys(CATS)){
+    box.appendChild(el('div', 'cat', CATS[cat][1] + ' · ' + CATS[cat][0]));
+    for (const d of DISHES.filter(x => x.cat === cat)){
+      const row = el('div', 'dish');
+      row.dataset.search = d.th;
+      const label = el('label');
+      const cb = el('input'); cb.type = 'checkbox'; cb.checked = !!state.picked[d.id];
+      const price = el('input'); price.type = 'text'; price.inputMode = 'decimal'; price.placeholder = 'ราคา';
+      price.setAttribute('aria-label', 'ราคา ' + d.th);
+      price.value = state.picked[d.id]?.price ?? ''; price.disabled = !cb.checked;
+      cb.id = 'cb-' + d.id; label.htmlFor = cb.id;
+      cb.addEventListener('change', () => {
+        state = { ...state, picked: { ...state.picked } };
+        if (cb.checked) state.picked[d.id] = { price: price.value }; else delete state.picked[d.id];
+        price.disabled = !cb.checked;
+        if (cb.checked) price.focus();
+        update();
+      });
+      price.addEventListener('input', () => {
+        state = { ...state, picked: { ...state.picked, [d.id]: { price: price.value } } };
+        update();
+      });
+      const name = el('span', null, d.th); name.appendChild(el('span', 'zh', d.zh));
+      label.append(name);
+      row.append(cb, label, price);
+      box.appendChild(row);
+    }
+  }
+}
+
+function renderCustoms(){
+  const box = $('customs');
+  box.textContent = '';
+  state.customs.forEach((c, i) => {
+    const row = el('div', 'custom');
+    const mk = (key, ph, cls) => {
+      const inp = el('input', cls); inp.value = c[key]; inp.placeholder = ph; inp.autocomplete = 'off';
+      inp.setAttribute('aria-label', ph);
+      inp.addEventListener('input', () => {
+        state = { ...state, customs: state.customs.map((x, j) => j === i ? { ...x, [key]: inp.value } : x) };
+        update();
+      });
+      return inp;
+    };
+    const del = el('button', 'btn-link', 'ลบ'); del.type = 'button';
+    del.addEventListener('click', () => {
+      state = { ...state, customs: state.customs.filter((_, j) => j !== i) };
+      renderCustoms(); update();
+    });
+    row.append(mk('th', 'ชื่อไทย เช่น ข้าวต้มปลา'), mk('zh', 'ชื่อจีน', 'c-zh'), mk('price', 'ราคา'), del);
+    box.appendChild(row);
+  });
+}
+
+function renderNotes(){
+  const box = $('notes');
+  for (const [key, th, zh] of NOTES){
+    const label = el('label');
+    const cb = el('input'); cb.type = 'checkbox'; cb.checked = !!state.notes[key];
+    cb.addEventListener('change', () => { state = { ...state, notes: { ...state.notes, [key]: cb.checked } }; update(); });
+    label.append(cb, el('span', null, th), el('span', 'zh', zh));
+    box.appendChild(label);
+  }
+}
+
+function renderSheet(){
+  $('p-shop-zh').textContent = state.shopZh.trim() || state.shopTh.trim() || 'ชื่อร้าน';
+  $('p-shop-th').textContent = state.shopZh.trim() ? state.shopTh.trim() : '';
+  const body = $('p-body');
+  body.textContent = '';
+  const groups = buildMenu(state);
+  $('p-empty').hidden = groups.length > 0;
+  for (const g of groups){
+    const h = el('h3', null, CATS[g.cat][0]); h.appendChild(el('small', null, CATS[g.cat][1]));
+    body.appendChild(h);
+    for (const it of g.items){
+      const row = el('div', 'row');
+      const names = el('div', 'names');
+      names.append(el('span', 'zh', it.zh), el('span', 'th', it.th));
+      row.append(names, el('span', 'price', it.price == null ? '' : fmtPrice(it.price)));
+      body.appendChild(row);
+    }
+  }
+  const foot = $('p-notes');
+  foot.textContent = '';
+  NOTES.filter(([key]) => state.notes[key]).forEach(([, , zh]) => foot.appendChild(el('span', null, zh)));
+}
+
+function update(){ renderSheet(); save(); }
+
+$('shop-th').value = state.shopTh;
+$('shop-zh').value = state.shopZh;
+$('shop-th').addEventListener('input', e => { state = { ...state, shopTh: e.target.value }; update(); });
+$('shop-zh').addEventListener('input', e => { state = { ...state, shopZh: e.target.value }; update(); });
+$('search').addEventListener('input', e => {
+  const q = e.target.value.trim();
+  document.querySelectorAll('.dish').forEach(r => { r.hidden = q !== '' && !r.dataset.search.includes(q); });
+});
+$('add-custom').addEventListener('click', () => {
+  state = { ...state, customs: [...state.customs, { th: '', zh: '', price: '' }] };
+  renderCustoms(); save();
+});
+$('copy-prompt').addEventListener('click', async () => {
+  const text = aiPrompt(state.customs);
+  if (!text){ $('copied').textContent = 'ใส่ชื่อเมนูไทยก่อน'; return; }
+  try { await navigator.clipboard.writeText(text); $('copied').textContent = 'คัดลอกแล้ว ไปวางใน ChatGPT หรือ Gemini ได้เลย'; }
+  catch (e) { $('copied').textContent = 'คัดลอกอัตโนมัติไม่ได้ ลองใช้เบราว์เซอร์อื่น'; }
+});
+$('print').addEventListener('click', () => window.print());
+
+renderDishes();
+renderCustoms();
+renderNotes();
+renderSheet();
+</script>
+</body>
+</html>
